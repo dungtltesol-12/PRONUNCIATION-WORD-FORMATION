@@ -1,0 +1,1566 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MT ENGLISH – Cổng Học Tập Ngữ Âm & Từ Loại</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ocean-900: #0a192f;
+    --ocean-800: #0f2942;
+    --ocean-600: #005b96;
+    --ocean-500: #0284c7;
+    --ocean-100: #e0f2fe;
+    --ocean-50:  #f0f9ff;
+    
+    --gold-500: #ffcc00;
+    --gold-600: #e6b800;
+    --gold-100: #fef9c3;
+    
+    --slate-800: #1e293b;
+    --slate-600: #475569;
+    --slate-400: #94a3b8;
+    --slate-200: #e2e8f0;
+    --slate-100: #f1f5f9;
+    
+    --success: #10b981;
+    --success-bg: #d1fae5;
+    --danger: #ef4444;
+    --danger-bg: #fee2e2;
+    
+    --radius-lg: 16px;
+    --radius-md: 12px;
+    --shadow-md: 0 10px 25px -5px rgba(15, 41, 66, 0.08), 0 8px 10px -6px rgba(15, 41, 66, 0.04);
+    --shadow-lg: 0 20px 35px -10px rgba(2, 132, 199, 0.18);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--ocean-50);
+    color: var(--slate-800);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ipa {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--ocean-600);
+    background: var(--ocean-100);
+    padding: 0.1rem 0.4rem;
+    border-radius: 6px;
+    font-size: 0.92em;
+    font-weight: 600;
+  }
+
+  /* NAVBAR & HEADER */
+  .navbar {
+    background: linear-gradient(135deg, var(--ocean-900) 0%, var(--ocean-600) 100%);
+    color: white;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 4px solid var(--gold-500);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  }
+  .brand-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .brand-badge {
+    background: var(--gold-500);
+    color: var(--ocean-900);
+    font-weight: 800;
+    font-size: 1.25rem;
+    padding: 0.35rem 1rem;
+    border-radius: 50px;
+    letter-spacing: 0.05em;
+    box-shadow: 0 4px 12px rgba(255, 204, 0, 0.35);
+    transition: transform 0.2s;
+  }
+  .brand-logo:hover .brand-badge { transform: scale(1.05); }
+  .brand-sub { font-size: 0.9rem; color: var(--ocean-100); font-weight: 600; }
+
+  .nav-breadcrumb {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  .btn-nav {
+    background: rgba(255,255,255,0.12);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.25);
+    padding: 0.45rem 1rem;
+    border-radius: 50px;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .btn-nav:hover { background: var(--gold-500); color: var(--ocean-900); border-color: var(--gold-500); }
+
+  /* CONTAINER & VIEWS */
+  .container {
+    max-width: 1150px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 4rem;
+    flex: 1;
+  }
+  .view-section { display: none; animation: fadeIn 0.3s ease; }
+  .view-section.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* HERO BANNER */
+  .hero-box {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  .hero-tag {
+    display: inline-block;
+    background: var(--gold-100);
+    color: #92400e;
+    border: 1px solid var(--gold-500);
+    font-weight: 700;
+    font-size: 0.8rem;
+    padding: 0.3rem 1rem;
+    border-radius: 50px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.8rem;
+  }
+  .hero-title {
+    font-size: clamp(1.8rem, 4vw, 2.75rem);
+    font-weight: 800;
+    color: var(--ocean-900);
+    margin-bottom: 0.5rem;
+  }
+  .hero-desc {
+    color: var(--slate-600);
+    font-size: 1.05rem;
+    max-width: 650px;
+    margin: 0 auto;
+  }
+
+  /* MAIN PORTAL CARDS (A & B) */
+  .portal-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 2rem;
+  }
+  .portal-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: 2.2rem;
+    border: 2px solid var(--slate-200);
+    box-shadow: var(--shadow-md);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .portal-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, var(--ocean-600), var(--gold-500));
+  }
+  .portal-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--ocean-500);
+    box-shadow: var(--shadow-lg);
+  }
+  .portal-icon {
+    width: 64px; height: 64px;
+    border-radius: 16px;
+    background: var(--ocean-100);
+    color: var(--ocean-600);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin-bottom: 1.25rem;
+  }
+  .portal-letter {
+    position: absolute;
+    top: 1.5rem; right: 1.8rem;
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: var(--slate-100);
+    line-height: 1;
+    pointer-events: none;
+  }
+  .portal-card h2 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--ocean-900);
+    margin-bottom: 0.6rem;
+  }
+  .portal-card p {
+    color: var(--slate-600);
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+  }
+  .sub-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.8rem;
+  }
+  .sub-pill {
+    background: var(--slate-100);
+    color: var(--slate-800);
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.35rem 0.8rem;
+    border-radius: 8px;
+  }
+  .portal-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.85rem 1.2rem;
+    background: var(--ocean-900);
+    color: var(--gold-500);
+    border-radius: var(--radius-md);
+    font-weight: 700;
+    font-size: 0.95rem;
+    transition: background 0.2s;
+  }
+  .portal-card:hover .portal-cta { background: var(--ocean-600); }
+
+  /* SUB-DIRECTORY GRID */
+  .subfolder-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  .folder-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: 1.8rem;
+    border: 1.5px solid var(--slate-200);
+    box-shadow: var(--shadow-md);
+    cursor: pointer;
+    transition: all 0.25s;
+    display: flex;
+    flex-direction: column;
+  }
+  .folder-card:hover {
+    border-color: var(--ocean-500);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+  .folder-badge {
+    align-self: flex-start;
+    background: var(--ocean-100);
+    color: var(--ocean-600);
+    font-weight: 700;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 50px;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+  }
+  .folder-card h3 {
+    font-size: 1.25rem;
+    color: var(--ocean-900);
+    margin-bottom: 0.5rem;
+    font-weight: 800;
+  }
+  .folder-card p {
+    color: var(--slate-600);
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+    flex: 1;
+  }
+  .folder-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px dashed var(--slate-200);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--ocean-600);
+  }
+
+  /* MODULE TABS (LÝ THUYẾT VS BÀI TẬP) */
+  .module-header {
+    background: white;
+    padding: 1.5rem 2rem;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    margin-bottom: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    border-left: 6px solid var(--gold-500);
+  }
+  .module-title h2 { font-size: 1.5rem; color: var(--ocean-900); font-weight: 800; }
+  .module-title p { font-size: 0.9rem; color: var(--slate-600); }
+
+  .tab-switcher {
+    display: flex;
+    background: var(--slate-100);
+    padding: 0.35rem;
+    border-radius: 12px;
+    gap: 0.35rem;
+  }
+  .tab-btn {
+    padding: 0.6rem 1.25rem;
+    border: none;
+    background: transparent;
+    border-radius: 9px;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--slate-600);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab-btn.active {
+    background: var(--ocean-600);
+    color: var(--gold-500);
+    box-shadow: 0 4px 10px rgba(0, 91, 150, 0.2);
+  }
+
+  /* THEORY STYLING */
+  .theory-box {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    box-shadow: var(--shadow-md);
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--slate-200);
+  }
+  .theory-box h3 {
+    font-size: 1.25rem;
+    color: var(--ocean-900);
+    margin-bottom: 1rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 2px solid var(--ocean-100);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .ipa-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+  .ipa-cell {
+    background: var(--ocean-50);
+    border: 1px solid #bae6fd;
+    border-radius: 10px;
+    padding: 0.75rem;
+    text-align: center;
+    transition: transform 0.15s;
+  }
+  .ipa-cell:hover { transform: translateY(-2px); border-color: var(--ocean-500); background: white; }
+  .ipa-sym {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--ocean-600);
+    display: block;
+    margin-bottom: 0.2rem;
+  }
+  .ipa-word { font-size: 0.85rem; color: var(--slate-600); font-weight: 600; }
+  .ipa-word u { color: var(--danger); text-decoration-thickness: 2px; }
+
+  .custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+    font-size: 0.92rem;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .custom-table th {
+    background: var(--ocean-900);
+    color: var(--gold-500);
+    text-align: left;
+    padding: 0.85rem 1rem;
+    font-weight: 700;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .custom-table td {
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid var(--slate-200);
+    vertical-align: top;
+  }
+  .custom-table tr:nth-child(even) { background: var(--ocean-50); }
+
+  .tip-alert {
+    background: var(--gold-100);
+    border-left: 5px solid var(--gold-500);
+    padding: 1rem 1.25rem;
+    border-radius: 0 10px 10px 0;
+    margin-top: 1rem;
+    font-size: 0.92rem;
+    color: #713f12;
+  }
+  .tip-alert strong { color: #92400e; }
+
+  /* PRACTICE ENGINE STYLING */
+  .quiz-controls {
+    background: white;
+    padding: 1.5rem;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid var(--slate-200);
+  }
+  .control-group {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+  .control-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--slate-600);
+    text-transform: uppercase;
+  }
+  .count-pill, .type-pill {
+    padding: 0.45rem 0.95rem;
+    border-radius: 8px;
+    border: 1.5px solid var(--slate-200);
+    background: white;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--slate-800);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .count-pill:hover, .type-pill:hover { border-color: var(--ocean-500); }
+  .count-pill.active, .type-pill.active {
+    background: var(--ocean-600);
+    color: white;
+    border-color: var(--ocean-600);
+  }
+  .btn-generate {
+    background: var(--gold-500);
+    color: var(--ocean-900);
+    border: none;
+    padding: 0.6rem 1.25rem;
+    border-radius: 10px;
+    font-family: inherit;
+    font-weight: 800;
+    font-size: 0.9rem;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(255, 204, 0, 0.3);
+    transition: all 0.2s;
+  }
+  .btn-generate:hover { background: var(--gold-600); transform: translateY(-1px); }
+
+  /* SCORE BANNER */
+  .score-banner {
+    display: none;
+    background: linear-gradient(135deg, var(--ocean-900), var(--ocean-600));
+    color: white;
+    padding: 1.8rem 2rem;
+    border-radius: var(--radius-lg);
+    margin-bottom: 1.5rem;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    border: 2px solid var(--gold-500);
+    box-shadow: var(--shadow-lg);
+  }
+  .score-banner.show { display: flex; }
+  .score-big {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--gold-500);
+    line-height: 1;
+  }
+  .score-details h4 { font-size: 1.25rem; margin-bottom: 0.25rem; }
+  .score-details p { color: var(--ocean-100); font-size: 0.9rem; }
+
+  /* QUESTION CARDS */
+  .q-item {
+    background: white;
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    border: 1.5px solid var(--slate-200);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    transition: border-color 0.2s;
+  }
+  .q-item.correct-card { border-color: var(--success); background: #f0fdf4; }
+  .q-item.wrong-card { border-color: var(--danger); background: #fef2f2; }
+
+  .q-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .q-num {
+    background: var(--ocean-900);
+    color: var(--gold-500);
+    font-weight: 800;
+    font-size: 0.8rem;
+    padding: 0.25rem 0.7rem;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+  .q-prompt {
+    font-size: 1.02rem;
+    font-weight: 600;
+    color: var(--slate-800);
+    flex: 1;
+  }
+
+  .options-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 0.75rem;
+  }
+  .opt-label {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.75rem 1rem;
+    border: 1.5px solid var(--slate-200);
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.15s;
+    background: white;
+  }
+  .opt-label:hover { border-color: var(--ocean-500); background: var(--ocean-50); }
+  .opt-label input { accent-color: var(--ocean-600); width: 17px; height: 17px; cursor: pointer; }
+  .opt-label.opt-correct { background: var(--success-bg); border-color: var(--success); color: #065f46; font-weight: 700; }
+  .opt-label.opt-wrong { background: var(--danger-bg); border-color: var(--danger); color: #991b1b; text-decoration: line-through; }
+
+  .text-answer-input {
+    width: 100%;
+    max-width: 380px;
+    padding: 0.7rem 1rem;
+    border: 2px solid var(--slate-200);
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 0.98rem;
+    font-weight: 600;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .text-answer-input:focus { border-color: var(--ocean-600); }
+
+  .q-feedback {
+    display: none;
+    margin-top: 1rem;
+    padding: 0.85rem 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    background: white;
+    border-left: 4px solid var(--ocean-600);
+  }
+  .q-feedback.show { display: block; }
+
+  .quiz-footer {
+    margin-top: 2rem;
+    text-align: center;
+  }
+  .btn-submit {
+    background: linear-gradient(135deg, var(--ocean-600), var(--ocean-900));
+    color: var(--gold-500);
+    border: 2px solid var(--gold-500);
+    padding: 0.95rem 2.8rem;
+    border-radius: 50px;
+    font-family: inherit;
+    font-size: 1.05rem;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: var(--shadow-lg);
+    transition: all 0.2s;
+  }
+  .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 12px 25px rgba(0, 91, 150, 0.3); }
+
+  footer {
+    background: var(--ocean-900);
+    color: var(--slate-400);
+    text-align: center;
+    padding: 1.8rem;
+    font-size: 0.88rem;
+    border-top: 3px solid var(--gold-500);
+    margin-top: auto;
+  }
+  footer strong { color: var(--gold-500); }
+
+  @media (max-width: 640px) {
+    .navbar { padding: 0.85rem 1rem; }
+    .module-header { padding: 1.2rem; }
+    .quiz-controls { flex-direction: column; align-items: stretch; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="brand-logo" onclick="navigateTo('home')">
+    <span class="brand-badge">MT ENGLISH</span>
+    <span class="brand-sub">Interactive Grammar & Phonetics</span>
+  </div>
+  <div class="nav-breadcrumb" id="navBreadcrumb">
+    <button class="btn-nav" onclick="navigateTo('home')">🏠 Trang chủ</button>
+  </div>
+</nav>
+
+<div class="container">
+
+  <!-- ==================== VIEW 1: TRANG CHỦ (CHỈ HIỆN MỤC A VÀ B) ==================== -->
+  <section id="view-home" class="view-section active">
+    <div class="hero-box">
+      <div class="hero-tag">✨ Hệ thống học tập tương tác 2026</div>
+      <h1 class="hero-title">Chinh Phục Ngữ Âm & Cấu Tạo Từ</h1>
+      <p class="hero-desc">Chọn chuyên đề bên dưới để khám phá các thư mục lý thuyết tinh gọn và rèn luyện với ngân hàng 200 câu hỏi tự động chấm điểm.</p>
+    </div>
+
+    <div class="portal-grid">
+      <!-- MỤC A -->
+      <div class="portal-card" onclick="navigateTo('secA')">
+        <div class="portal-letter">A</div>
+        <div>
+          <div class="portal-icon">🎧</div>
+          <h2>A. Học Về Phát Âm (Phonetics)</h2>
+          <p>Làm chủ bảng ký hiệu phiên âm quốc tế IPA, quy tắc phát âm đuôi -s/-es, -ed và bí quyết đánh trọng âm từ 2 đến 4+ âm tiết.</p>
+          <div class="sub-pills">
+            <span class="sub-pill">1. Bảng IPA (50 câu)</span>
+            <span class="sub-pill">2. Đuôi -s/-es & -ed (50 câu)</span>
+            <span class="sub-pill">3. Quy tắc Stress (50 câu)</span>
+          </div>
+        </div>
+        <div class="portal-cta">
+          <span>Mở 3 thư mục con</span>
+          <span>➔</span>
+        </div>
+      </div>
+
+      <!-- MỤC B -->
+      <div class="portal-card" onclick="navigateTo('secB')">
+        <div class="portal-letter">B</div>
+        <div>
+          <div class="portal-icon">🧩</div>
+          <h2>B. Cấu Tạo Từ (Word Formation)</h2>
+          <p>Nắm vững vị trí 4 từ loại (Danh - Động - Tính - Trạng), bảng hậu tố nhận diện nhanh và các bẫy từ loại thường gặp trong đề thi.</p>
+          <div class="sub-pills">
+            <span class="sub-pill">1. Lý thuyết vị trí & hậu tố</span>
+            <span class="sub-pill">2. Mẹo làm bài nhanh</span>
+            <span class="sub-pill">3. Luyện tập (50 câu)</span>
+          </div>
+        </div>
+        <div class="portal-cta">
+          <span>Mở thư mục chuyên đề</span>
+          <span>➔</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== VIEW 2: THƯ MỤC CON CỦA MỤC A ==================== -->
+  <section id="view-secA" class="view-section">
+    <div class="hero-box">
+      <div class="hero-tag">Chuyên đề A · Phonetics & Stress</div>
+      <h1 class="hero-title">Thư Mục Học Về Phát Âm</h1>
+      <p class="hero-desc">Chọn một phần học bên dưới để xem lý thuyết chi tiết và làm bài tập tương ứng (tùy chọn 10 – 50 câu).</p>
+    </div>
+
+    <div class="subfolder-grid">
+      <div class="folder-card" onclick="openModule('A1')">
+        <span class="folder-badge">Mục A.1</span>
+        <h3>1. Lý thuyết Bảng IPA</h3>
+        <p>Hệ thống 44 âm tiếng Anh chuẩn quốc tế (12 nguyên âm đơn, 8 nguyên âm đôi, 24 phụ âm) kèm bài tập đọc phiên âm đoán từ.</p>
+        <div class="folder-footer">
+          <span>📚 Lý thuyết + 50 câu hỏi</span>
+          <span>Vào học ➔</span>
+        </div>
+      </div>
+
+      <div class="folder-card" onclick="openModule('A2')">
+        <span class="folder-badge">Mục A.2</span>
+        <h3>2. Phát âm đuôi -s/-es & -ed</h3>
+        <p>Bảng quy tắc phát âm chuẩn xác kèm câu thần chú siêu dễ nhớ ("Thời phong kiến phương tây", "Chính phủ phát sách...").</p>
+        <div class="folder-footer">
+          <span>📚 Lý thuyết + 50 câu hỏi</span>
+          <span>Vào học ➔</span>
+        </div>
+      </div>
+
+      <div class="folder-card" onclick="openModule('A3')">
+        <span class="folder-badge">Mục A.3</span>
+        <h3>3. Quy tắc Trọng âm (Stress)</h3>
+        <p>Quy tắc nhấn trọng âm từ 2 âm tiết, 3+ âm tiết, từ ghép và các tiền tố/hậu tố không làm thay đổi trọng âm gốc.</p>
+        <div class="folder-footer">
+          <span>📚 Lý thuyết + 50 câu hỏi</span>
+          <span>Vào học ➔</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== VIEW 3: THƯ MỤC CON CỦA MỤC B ==================== -->
+  <section id="view-secB" class="view-section">
+    <div class="hero-box">
+      <div class="hero-tag">Chuyên đề B · Word Formation</div>
+      <h1 class="hero-title">Thư Mục Cấu Tạo Từ (Word Forms)</h1>
+      <p class="hero-desc">Bấm vào thư mục dưới đây để học bảng vị trí từ loại, dấu hiệu hậu tố và làm 50 câu bài tập vận dụng.</p>
+    </div>
+
+    <div class="subfolder-grid" style="max-width: 550px; margin: 0 auto;">
+      <div class="folder-card" onclick="openModule('B1')">
+        <span class="folder-badge">Mục B.1</span>
+        <h3>1. Lý thuyết & Bài tập Word Formation</h3>
+        <p>Tổng hợp vị trí Danh từ, Tính từ, Trạng từ, Động từ; quy tắc cụm danh từ, phân biệt tính từ đuôi -ed/-ing và 50 câu thực hành đa dạng.</p>
+        <div class="folder-footer">
+          <span>📚 Lý thuyết + 50 câu hỏi</span>
+          <span>Vào học ngay ➔</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== VIEW 4: KHÔNG GIAN HỌC TẬP & LÀM BÀI (MODULE VIEW) ==================== -->
+  <section id="view-module" class="view-section">
+    <div class="module-header">
+      <div class="module-title">
+        <h2 id="modTitle">Tên Chuyên Đề</h2>
+        <p id="modSubtitle">Lý thuyết trọng tâm & Bài tập thực hành tự chọn</p>
+      </div>
+      <div class="tab-switcher">
+        <button class="tab-btn active" id="btnTabTheory" onclick="switchTab('theory')">📖 Lý Thuyết</button>
+        <button class="tab-btn" id="btnTabPractice" onclick="switchTab('practice')">✍️ Làm Bài Tập (50 Câu)</button>
+      </div>
+    </div>
+
+    <!-- NỘI DUNG LÝ THUYẾT -->
+    <div id="contentTheory"></div>
+
+    <!-- NỘI DUNG BÀI TẬP -->
+    <div id="contentPractice" style="display: none;">
+      <div class="quiz-controls">
+        <div class="control-group">
+          <span class="control-label">Số câu muốn làm:</span>
+          <button class="count-pill" onclick="setQuizCount(10)">10</button>
+          <button class="count-pill active" onclick="setQuizCount(20)">20</button>
+          <button class="count-pill" onclick="setQuizCount(30)">30</button>
+          <button class="count-pill" onclick="setQuizCount(40)">40</button>
+          <button class="count-pill" onclick="setQuizCount(50)">50</button>
+        </div>
+
+        <div class="control-group" id="modeControlGroup">
+          <span class="control-label">Dạng bài:</span>
+          <button class="type-pill active" data-mode="mcq" onclick="setQuizMode('mcq')">Trắc nghiệm (A, B, C, D)</button>
+          <button class="type-pill" data-mode="input" onclick="setQuizMode('input')">Tự luận (Điền từ)</button>
+          <button class="type-pill" data-mode="mixed" onclick="setQuizMode('mixed')">Kết hợp</button>
+        </div>
+
+        <button class="btn-generate" onclick="renderQuiz()">🔄 Tạo Đề Mới</button>
+      </div>
+
+      <!-- Khung báo điểm -->
+      <div class="score-banner" id="scoreBanner">
+        <div class="score-details">
+          <h4 id="scoreTitle">Kết quả bài làm của bạn</h4>
+          <p id="scoreDesc">Hãy xem chi tiết đáp án và giải thích ở từng câu bên dưới.</p>
+        </div>
+        <div class="score-big" id="scoreValue">0 / 20</div>
+      </div>
+
+      <!-- Danh sách câu hỏi -->
+      <div id="quizContainer"></div>
+
+      <div class="quiz-footer">
+        <button class="btn-submit" id="btnSubmitQuiz" onclick="submitQuiz()">✅ Nộp Bài & Chấm Điểm</button>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  Hệ thống học tập tương tác độc quyền của <strong>MT ENGLISH</strong> · Thiết kế hiện đại, chuẩn hóa IPA Unicode
+</footer>
+
+<script>
+/* ============================================================================
+   1. DỮ LIỆU LÝ THUYẾT (THEORY HTML TEMPLATES)
+============================================================================ */
+const THEORY_HTML = {
+  A1: `
+    <div class="theory-box">
+      <h3>🔤 1. Nguyên Âm Đơn (Monophthongs - 12 âm)</h3>
+      <div class="ipa-grid">
+        <div class="ipa-cell"><span class="ipa-sym">/iː/</span><span class="ipa-word">sh<u>ee</u>p, s<u>ea</u></span></div>
+        <div class="ipa-cell"><span class="ipa-sym">/ɪ/</span><span class="ipa-word">sh<u>i</u>p, s<u>i</u>t</span></div>
+        <div class="ipa-cell"><span class="ipa-sym">/ʊ/</span><span class="ipa-word">f<u>oo</u>t, p<u>u</u>t</span></div>
+        <div class="ipa-cell"><span class="ipa-sym">/uː/</span><span class="ipa-word">f<u>oo</u>d, bl<u>ue</u></span></div>
+        <div class="ipa-cell"><span class="ipa-sym">/e/</span><span class="ipa-word">b<u>e</u>d, h<u>ea</u>d</span></div>
+        <div class="ipa-cell"><span class="ipa-sym">/ə/</span><span class="ipa-word">lead<u>er</u>, <u>a</u>bout</span></div>
+        <div class="ipa-cell"><span class="ipa-sym">/ɜː/</span><span class="ipa-word">b<u>ir</u>d, n<u>ur</u>se</span></div>
+        <div class="ipa-cell"><span class="ipa-sym">/ɔː/</span><span class="ipa-word">d<u>oo</u>r, s<u>aw</u></span></div>
+        <div class="ipa-cell"><span class="ipa-sym">/æ/</span><span class="ipa-word">c<u>a</u>t, b<u>a</u>d</span></div>
+        <div class="ipa-cell"><span class="ipa-sym">/ʌ/</span><span class="ipa-word">c<u>u</u>t, l<u>o</u>ve</span></div>
+        <div class="ipa-cell"><span class="ipa-sym">/ɑː/</span><span class="ipa-word">c<u>ar</u>d, f<u>a</u>ther</span></div>
+        <div class="ipa-cell"><span class="ipa-sym">/ɒ/</span><span class="ipa-word">n<u>o</u>t, h<u>o</u>t</span></div>
+      </div>
+
+      <h3>🔀 2. Nguyên Âm Đôi (Diphthongs - 8 âm)</h3>
+      <div class="ipa-grid">
+        <div class="ipa-cell"><span class="ipa-sym">/ɪə/</span><span class="ipa-word"><u>ear</u>, h<u>ere</u></span></div>
+        <div class="ipa-cell"><span class="ipa-sym">/eɪ/</span><span class="ipa-word"><u>ei</u>ght, d<u>ay</u></span></div>
+        <div class="ipa-cell"><span class="ipa-sym">/ʊə/</span><span class="ipa-word">s<u>ure</u>, t<u>our</u></span></div>
+        <div class="ipa-cell"><span class="ipa-sym">/ɔɪ/</span><span class="ipa-word">t<u>oy</u>, b<u>oy</u></span></div>
+        <div class="ipa-cell"><span class="ipa-sym">/əʊ/</span><span class="ipa-word">sh<u>ow</u>, g<u>o</u></span></div>
+        <div class="ipa-cell"><span class="ipa-sym">/eə/</span><span class="ipa-word">sh<u>are</u>, h<u>air</u></span></div>
+        <div class="ipa-cell"><span class="ipa-sym">/aɪ/</span><span class="ipa-word">cr<u>y</u>, m<u>y</u></span></div>
+        <div class="ipa-cell"><span class="ipa-sym">/aʊ/</span><span class="ipa-word">c<u>ow</u>, n<u>ow</u></span></div>
+      </div>
+
+      <h3>🗣️ 3. Phụ Âm (Consonants - 24 âm)</h3>
+      <div class="ipa-grid">
+        <div class="ipa-cell"><span class="ipa-sym">/p/</span><span class="ipa-word"><u>p</u>ie, st<u>op</u></span></div>
+        <div class="ipa-cell"><span class="ipa-sym">/b/</span><span class="ipa-word"><u>b</u>ye, <u>b</u>ag</span></div>
+        <div class="ipa-cell"><span class="ipa-sym">/t/</span><span class="ipa-word"><u>t</u>ie, ca<u>t</u></span></div>
+        <div class="ipa-cell"><span class="ipa-sym">/d/</span><span class="ipa-word"><u>d</u>ye, <u>d</u>og</span></div>
+        <div class="ipa-cell"><span class="ipa-sym">/tʃ/</span><span class="ipa-word"><u>ch</u>eap, wa<u>tch</u></span></div>
+        <div class="ipa-cell"><span class="ipa-sym">/dʒ/</span><span class="ipa-word"><u>j</u>eep, chan<u>ge</u></span></div>
+        <div class="ipa-cell"><span class="ipa-sym">/k/</span><span class="ipa-word"><u>c</u>ame, loo<u>k</u></span></div>
+        <div class="ipa-cell"><span class="ipa-sym">/ɡ/</span><span class="ipa-word"><u>g</u>ame, <u>g</u>o</span></div>
+        <div class="ipa-cell"><span class="ipa-sym">/f/</span><span class="ipa-word"><u>f</u>an, lau<u>gh</u></span></div>
+        <div class="ipa-cell"><span class="ipa-sym">/v/</span><span class="ipa-word"><u>v</u>an, lo<u>ve</u></span></div>
+        <div class="ipa-cell"><span class="ipa-sym">/θ/</span><span class="ipa-word"><u>th</u>ink, pa<u>th</u></span></div>
+        <div class="ipa-cell"><span class="ipa-sym">/ð/</span><span class="ipa-word"><u>th</u>ere, we<u>ath</u>er</span></div>
+        <div class="ipa-cell"><span class="ipa-sym">/s/</span><span class="ipa-word"><u>s</u>ee, mi<u>ss</u></span></div>
+        <div class="ipa-cell"><span class="ipa-sym">/z/</span><span class="ipa-word"><u>z</u>oom, ро<u>s</u>e</span></div>
+        <div class="ipa-cell"><span class="ipa-sym">/ʃ/</span><span class="ipa-word"><u>sh</u>e, wa<u>sh</u></span></div>
+        <div class="ipa-cell"><span class="ipa-sym">/ʒ/</span><span class="ipa-word">vi<u>s</u>ion, deci<u>s</u>ion</span></div>
+        <div class="ipa-cell"><span class="ipa-sym">/m/</span><span class="ipa-word"><u>m</u>ail, ho<u>m</u>e</span></div>
+        <div class="ipa-cell"><span class="ipa-sym">/n/</span><span class="ipa-word"><u>n</u>ail, su<u>n</u></span></div>
+        <div class="ipa-cell"><span class="ipa-sym">/ŋ/</span><span class="ipa-word">a<u>n</u>kle, si<u>ng</u></span></div>
+        <div class="ipa-cell"><span class="ipa-sym">/h/</span><span class="ipa-word"><u>h</u>it, <u>h</u>ouse</span></div>
+        <div class="ipa-cell"><span class="ipa-sym">/l/</span><span class="ipa-word"><u>l</u>it, fall</span></div>
+        <div class="ipa-cell"><span class="ipa-sym">/r/</span><span class="ipa-word"><u>r</u>ed, <u>r</u>un</span></div>
+        <div class="ipa-cell"><span class="ipa-sym">/w/</span><span class="ipa-word"><u>w</u>et, <u>w</u>in</span></div>
+        <div class="ipa-cell"><span class="ipa-sym">/j/</span><span class="ipa-word"><u>y</u>es, <u>u</u>nit</span></div>
+      </div>
+      <div class="tip-alert">
+        <strong>💡 Lưu ý khi đọc phiên âm IPA:</strong> Dấu <span class="ipa">ˈ</span> đặt ngay trước âm tiết nào thì âm tiết đó nhận trọng âm chính. Dấu <span class="ipa">ː</span> biểu thị nguyên âm dài.
+      </div>
+    </div>
+  `,
+  A2: `
+    <div class="theory-box">
+      <h3>1. Bảng quy tắc phát âm đuôi -s / -es</h3>
+      <table class="custom-table">
+        <tr><th>Phát âm</th><th>Điều kiện (Âm cuối của từ gốc)</th><th>Mẹo ghi nhớ</th><th>Ví dụ minh họa</th></tr>
+        <tr>
+          <td><span class="ipa">/s/</span></td>
+          <td>Tận cùng là âm Vô thanh (trừ âm gió):<br><span class="ipa">/p/, /t/, /k/, /f/, /θ/</span> (chữ: p, t, k, f, gh, ph, th)</td>
+          <td><strong>T</strong>hời <strong>p</strong>hong <strong>k</strong>iến <strong>p</strong>hương <strong>t</strong>ây</td>
+          <td>stop<strong>s</strong>, cook<strong>s</strong>, laugh<strong>s</strong>, cough<strong>s</strong>, path<strong>s</strong></td>
+        </tr>
+        <tr>
+          <td><span class="ipa">/ɪz/</span></td>
+          <td>Tận cùng là các âm gió (tiếng rít):<br><span class="ipa">/s/, /z/, /ʃ/, /tʃ/, /ʒ/, /dʒ/</span> (chữ: s, ss, x, z, ch, sh, ce, ge)</td>
+          <td><strong>S</strong>óng <strong>g</strong>ió <strong>ch</strong>ẳng <strong>s</strong>ợ <strong>z</strong>ó <strong>g</strong>iông</td>
+          <td>watch<strong>es</strong>, kiss<strong>es</strong>, chang<strong>es</strong>, fix<strong>es</strong>, wash<strong>es</strong></td>
+        </tr>
+        <tr>
+          <td><span class="ipa">/z/</span></td>
+          <td>Tận cùng là nguyên âm & các âm Hữu thanh còn lại</td>
+          <td>Còn lại</td>
+          <td>play<strong>s</strong>, love<strong>s</strong>, hug<strong>s</strong>, dream<strong>s</strong>, run<strong>s</strong></td>
+        </tr>
+      </table>
+
+      <h3 style="margin-top: 2rem;">2. Bảng quy tắc phát âm đuôi -ed</h3>
+      <table class="custom-table">
+        <tr><th>Phát âm</th><th>Điều kiện (Âm cuối của động từ gốc)</th><th>Mẹo ghi nhớ</th><th>Ví dụ minh họa</th></tr>
+        <tr>
+          <td><span class="ipa">/ɪd/</span></td>
+          <td>Tận cùng là âm <span class="ipa">/t/</span> hoặc <span class="ipa">/d/</span> (chữ cái tận cùng là <strong>t, d</strong>)</td>
+          <td><strong>T</strong>ình <strong>Đ</strong>ầu</td>
+          <td>want<strong>ed</strong>, need<strong>ed</strong>, decid<strong>ed</strong>, invit<strong>ed</strong></td>
+        </tr>
+        <tr>
+          <td><span class="ipa">/t/</span></td>
+          <td>Tận cùng là âm Vô thanh:<br><span class="ipa">/p/, /k/, /f/, /s/, /ʃ/, /tʃ/</span> (chữ: p, k, f, gh, s, ss, x, ce, sh, ch)</td>
+          <td><strong>Ch</strong>ính <strong>p</strong>hủ <strong>ph</strong>át <strong>s</strong>ách <strong>k</strong>hông <strong>th</strong>èm <strong>sh</strong>are</td>
+          <td>wash<strong>ed</strong>, look<strong>ed</strong>, miss<strong>ed</strong>, stopp<strong>ed</strong>, laugh<strong>ed</strong></td>
+        </tr>
+        <tr>
+          <td><span class="ipa">/d/</span></td>
+          <td>Tận cùng là nguyên âm & các âm Hữu thanh còn lại</td>
+          <td>Còn lại</td>
+          <td>play<strong>ed</strong>, learn<strong>ed</strong>, damag<strong>ed</strong>, clean<strong>ed</strong></td>
+        </tr>
+      </table>
+    </div>
+  `,
+  A3: `
+    <div class="theory-box">
+      <h3>1. Từ có 2 âm tiết (2-Syllable Words)</h3>
+      <table class="custom-table">
+        <tr><th>Loại từ / Dấu hiệu</th><th>Quy tắc trọng âm</th><th>Ví dụ chuẩn IPA</th></tr>
+        <tr>
+          <td><strong>Động từ (Verbs)</strong></td>
+          <td>Nhấn vào <strong>âm tiết 2</strong></td>
+          <td>assist <span class="ipa">/əˈsɪst/</span>, destroy <span class="ipa">/dɪˈstrɔɪ/</span>, maintain <span class="ipa">/meɪnˈteɪn/</span>, improve <span class="ipa">/ɪmˈpruːv/</span></td>
+        </tr>
+        <tr>
+          <td><strong>Danh từ & Tính từ</strong></td>
+          <td>Nhấn vào <strong>âm tiết 1</strong></td>
+          <td>mountain <span class="ipa">/ˈmaʊn.tɪn/</span>, handsome <span class="ipa">/ˈhæn.səm/</span>, pretty <span class="ipa">/ˈprɪt.i/</span>, happy <span class="ipa">/ˈhæp.i/</span></td>
+        </tr>
+        <tr>
+          <td><strong>Bắt đầu bằng <em>re-, be-</em></strong></td>
+          <td>Nhấn vào <strong>âm tiết 2</strong></td>
+          <td>remind <span class="ipa">/rɪˈmaɪnd/</span>, refuse <span class="ipa">/rɪˈfjuːz/</span>, begin <span class="ipa">/bɪˈɡɪn/</span>, believe <span class="ipa">/bɪˈliːv/</span></td>
+        </tr>
+      </table>
+
+      <h3 style="margin-top: 2rem;">2. Từ có 3 âm tiết trở lên (3+ Syllables)</h3>
+      <table class="custom-table">
+        <tr><th>Đuôi (Endings)</th><th>Quy tắc trọng âm</th><th>Ví dụ chuẩn IPA</th></tr>
+        <tr>
+          <td><strong>-ic, -ity, -ics, -ian, -tion, -sion, -ious, -ial</strong></td>
+          <td>Nhấn vào âm <strong>ngay trước nó</strong></td>
+          <td>scientific <span class="ipa">/ˌsaɪənˈtɪf.ɪk/</span>, ability <span class="ipa">/əˈbɪl.ə.ti/</span>, attention <span class="ipa">/əˈten.ʃən/</span>, delicious <span class="ipa">/dɪˈlɪʃ.əs/</span></td>
+        </tr>
+        <tr>
+          <td><strong>-ade, -ee, -ese, -eer, -oo, -oon, -aire, -ique</strong></td>
+          <td>Nhấn vào <strong>chính nó</strong></td>
+          <td>Vietnamese <span class="ipa">/ˌvjet.nəˈmiːz/</span>, refugee <span class="ipa">/ˌref.juˈdʒiː/</span>, kangaroo <span class="ipa">/ˌkæŋ.ɡərˈuː/</span>, lemonade <span class="ipa">/ˌlem.əˈneɪd/</span></td>
+        </tr>
+        <tr>
+          <td><strong>-y, -ate, -ize, -ce, -ge, -ment</strong> (từ 3 âm trở lên)</td>
+          <td>Nhấn vào âm tiết <strong>thứ 3 từ cuối lên</strong></td>
+          <td>economy <span class="ipa">/ɪˈkɒn.ə.mi/</span>, celebrate <span class="ipa">/ˈsel.ə.breɪt/</span>, industrialize <span class="ipa">/ɪnˈdʌs.tri.ə.laɪz/</span></td>
+        </tr>
+      </table>
+
+      <h3 style="margin-top: 2rem;">3. Từ ghép (Compound Words) & Tiền tố / Hậu tố</h3>
+      <table class="custom-table">
+        <tr><th>Trường hợp</th><th>Quy tắc cốt lõi</th><th>Ví dụ</th></tr>
+        <tr>
+          <td><strong>Danh từ ghép</strong></td>
+          <td>Nhấn vào thành tố <strong>đầu tiên (âm 1)</strong></td>
+          <td>schoolyard <span class="ipa">/ˈskuːl.jɑːd/</span>, background <span class="ipa">/ˈbæk.ɡraʊnd/</span>, raincoat <span class="ipa">/ˈreɪn.kəʊt/</span></td>
+        </tr>
+        <tr>
+          <td><strong>Từ ghép có Giới từ</strong></td>
+          <td>Nhấn vào thành tố <strong>phía sau giới từ</strong></td>
+          <td>understand <span class="ipa">/ˌʌn.dəˈstænd/</span>, overcome <span class="ipa">/ˌəʊ.vəˈkʌm/</span> (Ngoại lệ N: intake <span class="ipa">/ˈɪn.teɪk/</span>)</td>
+        </tr>
+        <tr>
+          <td><strong>Tiền tố & Hậu tố</strong></td>
+          <td><strong>KHÔNG làm thay đổi</strong> trọng âm của từ gốc.<br>• Tiền tố: <em>un-, dis-, im-, ir-, il-, re-, mis-, pre-</em><br>• Hậu tố: <em>-ful, -less, -ness, -ly, -hood, -ship, -ment</em></td>
+          <td>believe <span class="ipa">/bɪˈliːv/</span> → unbelievable <span class="ipa">/ˌʌn.bɪˈliː.və.bəl/</span><br>happy <span class="ipa">/ˈhæp.i/</span> → happiness <span class="ipa">/ˈhæp.i.nəs/</span></td>
+        </tr>
+      </table>
+    </div>
+  `,
+  B1: `
+    <div class="theory-box">
+      <h3>1. Bảng Vị Trí & Dấu Hiệu Nhận Biết 4 Từ Loại</h3>
+      <table class="custom-table">
+        <tr><th>Từ loại</th><th>Vị trí trong câu</th><th>Hậu tố thường gặp (Đuôi từ)</th></tr>
+        <tr>
+          <td><strong>Danh từ (Noun)</strong></td>
+          <td>• Làm chủ ngữ (S) hoặc tân ngữ (O)<br>• Đứng <strong>sau Tính từ</strong><br>• Sau mạo từ (<em>a, an, the</em>), từ chỉ định (<em>this, that...</em>), tính từ sở hữu (<em>my, your, his...</em>), lượng từ (<em>many, some, a lot of...</em>)<br>• Đứng <strong>sau Giới từ</strong> (in, on, at, of, for...)<br>• Đứng <strong>sau "enough"</strong> (enough + N)</td>
+          <td><strong>-tion / -sion</strong> (decision, attention)<br><strong>-ment</strong> (development, equipment)<br><strong>-ness</strong> (happiness, kindness)<br><strong>-ity</strong> (ability, nationality)<br><strong>-ance / -ence</strong> (importance, difference)<br><strong>-er / -or / -ist / -ee</strong> (teacher, photographer)<br><strong>-ship / -hood / -dom / -th</strong> (friendship, strength)</td>
+        </tr>
+        <tr>
+          <td><strong>Tính từ (Adjective)</strong></td>
+          <td>• Đứng <strong>trước Danh từ</strong> để bổ nghĩa<br>• Đứng <strong>sau Linking Verbs</strong>: <em>be, become, get, grow, turn, seem, appear, look, feel, taste, smell, sound, stay, remain, keep</em><br>• Sau <strong>"too"</strong> (too + adj) và trước <strong>"enough"</strong> (adj + enough)<br>• Trong cấu trúc <em>so + adj + that</em><br>• Sau <em>make / keep / find + O + Adj</em></td>
+          <td><strong>-ful / -less</strong> (careful, careless, harmless)<br><strong>-able / -ible</strong> (reliable, comfortable)<br><strong>-ous / -ious</strong> (dangerous, delicious, famous)<br><strong>-ive</strong> (active, competitive, protective)<br><strong>-al / -ic</strong> (natural, energetic, scientific)<br><strong>-ant / -ent</strong> (important, different, patient)<br><strong>-y / -ish / -ly</strong> (healthy, selfish, friendly)</td>
+        </tr>
+        <tr>
+          <td><strong>Trạng từ (Adverb)</strong></td>
+          <td>• Bổ nghĩa cho Động từ thường (đứng <strong>trước hoặc sau V thường</strong>)<br>• Đứng giữa Trợ động từ và Động từ chính (<em>has <u>significantly</u> increased</em>)<br>• Đứng <strong>trước Tính từ</strong> để chỉ mức độ (<em><u>extremely</u> harmful</em>)<br>• Đứng đầu câu, ngăn cách bởi dấu phẩy (<em><u>Unfortunately</u>, ...</em>)</td>
+          <td><strong>-ly</strong> (Adj + ly → Adv: happily, quickly, significantly)<br><strong>-ward(s) / -wise</strong> (backwards, otherwise)<br><br><em>⚠️ Bẫy đề thi:</em> Các từ có đuôi <strong>-ly</strong> nhưng là <strong>Tính từ</strong>: <em>friendly, lovely, lonely, lively, silly, costly, early</em>.</td>
+        </tr>
+        <tr>
+          <td><strong>Động từ (Verb)</strong></td>
+          <td>• Đứng ngay <strong>sau Chủ ngữ (S)</strong><br>• Đứng sau <em>to</em> (to-infinitive) hoặc Động từ khuyết thiếu (<em>can, will, must, should + V0</em>)<br>• Đứng sau trạng từ chỉ tần suất (<em>always, usually, often + V</em>)</td>
+          <td><strong>-ate</strong> (decorate, communicate)<br><strong>-en</strong> (widen, strengthen, broaden)<br><strong>-ify</strong> (simplify, clarify, beautify)<br><strong>-ize / -ise</strong> (organize, modernize)<br>Tiền tố <strong>en-</strong> (encourage, endanger)</td>
+        </tr>
+      </table>
+
+      <div class="tip-alert">
+        <strong>🔥 Công thức Vàng cho Cụm Danh Từ & Mẹo làm bài nhanh:</strong><br>
+        1. <strong>Trật tự cụm danh từ:</strong> <span class="ipa">[A / An / The / My / This / Many] + ADV (3) + ADJ (2) + NOUN (1)</span><br>
+        2. <strong>Phân biệt Tính từ đuôi -ED và -ING:</strong><br>
+        • <strong>V-ed:</strong> Diễn tả cảm xúc của người (bị tác động) → <em>She felt <u>disappointed</u> / He is <u>interested</u> in...</em><br>
+        • <strong>V-ing:</strong> Diễn tả bản chất, tính chất của sự vật/sự việc → <em>The noise was <u>annoying</u> / An <u>interesting</u> book.</em><br>
+        3. <strong>Cẩn thận nghĩa Phủ định (Tiền tố un-, im-, in-, il-, ir-, dis-, mis- hoặc hậu tố -less):</strong> Đọc kỹ ngữ cảnh câu (ví dụ: <em>leave the door unlocked → <u>careless</u></em>; <em>park in front of the hospital gate → <u>illegal</u></em>).
+      </div>
+    </div>
+  `
+};
+
+/* ============================================================================
+   2. NGÂN HÀNG 200 CÂU HỎI (4 CHUYÊN ĐỀ x 50 CÂU)
+============================================================================ */
+
+// --- A1: 50 CÂU BẢNG IPA (Từ file gốc + mở rộng đồng bộ) ---
+const RAW_A1 = [
+  { ipa: "/ɪnˈvaɪrənmənt/", ans: "environment", opts: ["environment", "equipment", "government", "development"], mean: "môi trường" },
+  { ipa: "/ˈtʃælɪndʒ/", ans: "challenge", opts: ["challenge", "change", "champion", "channel"], mean: "thử thách" },
+  { ipa: "/trəˈdɪʃn/", ans: "tradition", opts: ["tradition", "condition", "addition", "ambition"], mean: "truyền thống" },
+  { ipa: "/ɪˈkwɪpmənt/", ans: "equipment", opts: ["equipment", "environment", "excitement", "employment"], mean: "trang thiết bị" },
+  { ipa: "/ˈɔːdiəns/", ans: "audience", opts: ["audience", "evidence", "influence", "patience"], mean: "khán giả" },
+  { ipa: "/ˌvɒlənˈtɪə(r)/", ans: "volunteer", opts: ["volunteer", "engineer", "pioneer", "career"], mean: "tình nguyện viên" },
+  { ipa: "/ˈnesəsəri/", ans: "necessary", opts: ["necessary", "dictionary", "ordinary", "secretary"], mean: "cần thiết" },
+  { ipa: "/dɪˈsɪʒn/", ans: "decision", opts: ["decision", "division", "television", "occasion"], mean: "quyết định" },
+  { ipa: "/ˈsentʃəri/", ans: "century", opts: ["century", "culture", "country", "factory"], mean: "thế kỷ" },
+  { ipa: "/ˈlæŋɡwɪdʒ/", ans: "language", opts: ["language", "luggage", "message", "village"], mean: "ngôn ngữ" },
+  { ipa: "/ˈkʌltʃə(r)/", ans: "culture", opts: ["culture", "creature", "nature", "future"], mean: "văn hóa" },
+  { ipa: "/ɪnˈkʌrɪdʒ/", ans: "encourage", opts: ["encourage", "courage", "manage", "damage"], mean: "khuyến khích" },
+  { ipa: "/ˈbenɪfɪt/", ans: "benefit", opts: ["benefit", "habit", "profit", "credit"], mean: "lợi ích" },
+  { ipa: "/ɪkˈspɪəriəns/", ans: "experience", opts: ["experience", "experiment", "expensive", "existence"], mean: "kinh nghiệm / trải nghiệm" },
+  { ipa: "/ˈpæsɪndʒə(r)/", ans: "passenger", opts: ["passenger", "messenger", "stranger", "teenager"], mean: "hành khách" },
+  { ipa: "/dɪˈlɪʃəs/", ans: "delicious", opts: ["delicious", "precious", "ambitious", "suspicious"], mean: "ngon miệng" },
+  { ipa: "/ˈfɜːnɪtʃə(r)/", ans: "furniture", opts: ["furniture", "temperature", "literature", "adventure"], mean: "đồ nội thất" },
+  { ipa: "/ədˈventʃə(r)/", ans: "adventure", opts: ["adventure", "departure", "signature", "structure"], mean: "cuộc phiêu lưu" },
+  { ipa: "/ˈkjʊəriəs/", ans: "curious", opts: ["curious", "furious", "serious", "generous"], mean: "tò mò" },
+  { ipa: "/pəˈluːʃn/", ans: "pollution", opts: ["pollution", "solution", "population", "instruction"], mean: "sự ô nhiễm" },
+  { ipa: "/ˈfæməli/", ans: "family", opts: ["family", "factory", "finally", "friendly"], mean: "gia đình" },
+  { ipa: "/ˈstjuːdənt/", ans: "student", opts: ["student", "confident", "accident", "president"], mean: "học sinh, sinh viên" },
+  { ipa: "/ˈbjuːtɪfl/", ans: "beautiful", opts: ["beautiful", "wonderful", "careful", "peaceful"], mean: "xinh đẹp" },
+  { ipa: "/ˈhɒspɪtl/", ans: "hospital", opts: ["hospital", "capital", "hotel", "festival"], mean: "bệnh viện" },
+  { ipa: "/ˈweðə(r)/", ans: "weather", opts: ["weather", "whether", "feather", "leather"], mean: "thời tiết" },
+  { ipa: "/ˈkʌntri/", ans: "country", opts: ["country", "county", "century", "company"], mean: "đất nước / miền quê" },
+  { ipa: "/ˈmjuːzɪk/", ans: "zik", ans: "music", opts: ["music", "magic", "museum", "basic"], mean: "âm nhạc" },
+  { ipa: "/ˈdɪfrənt/", ans: "different", opts: ["different", "difficult", "dependent", "confident"], mean: "khác biệt" },
+  { ipa: "/ɪmˈpɔːtnt/", ans: "important", opts: ["important", "assistant", "distant", "instant"], mean: "quan trọng" },
+  { ipa: "/ˈfjuːtʃə(r)/", ans: "future", opts: ["future", "picture", "lecture", "nature"], mean: "tương lai" },
+  { ipa: "/dɪˈfɪkəlt/", ans: "difficult", opts: ["difficult", "different", "delicate", "definite"], mean: "khó khăn" },
+  { ipa: "/ˈpɒpjələ(r)/", ans: "popular", opts: ["popular", "regular", "similar", "particular"], mean: "phổ biến" },
+  { ipa: "/ˈpɜːfɪkt/", ans: "perfect", opts: ["perfect", "project", "subject", "respect"], mean: "hoàn hảo" },
+  { ipa: "/ˈneɪbə(r)/", ans: "neighbour", opts: ["neighbour", "nature", "number", "member"], mean: "hàng xóm (chấp nhận neighbor/neighbour)" },
+  { ipa: "/ˈɪntrəstɪŋ/", ans: "interesting", opts: ["interesting", "exciting", "inspiring", "confusing"], mean: "thú vị" },
+  { ipa: "/ˈkʌmfətəbl/", ans: "comfortable", opts: ["comfortable", "fashionable", "reasonable", "vegetable"], mean: "thoải mái" },
+  { ipa: "/tekˈnɒlədʒi/", ans: "technology", opts: ["technology", "biology", "psychology", "apology"], mean: "công nghệ" },
+  { ipa: "/ˈkærəktə(r)/", ans: "character", opts: ["character", "calendar", "customer", "carpenter"], mean: "nhân vật / tính cách" },
+  { ipa: "/səkˈses/", ans: "success", opts: ["success", "process", "address", "access"], mean: "sự thành công" },
+  { ipa: "/ɪˈventʃuəli/", ans: "eventually", opts: ["eventually", "actually", "especially", "gradually"], mean: "cuối cùng thì" },
+  { ipa: "/ˈnɒlɪdʒ/", ans: "knowledge", opts: ["knowledge", "college", "cottage", "marriage"], mean: "kiến thức" },
+  { ipa: "/ˈɡʌvənmənt/", ans: "government", opts: ["government", "movement", "agreement", "department"], mean: "chính phủ" },
+  { ipa: "/ˌɪnfəˈmeɪʃn/", ans: "information", opts: ["information", "invitation", "imagination", "application"], mean: "thông tin" },
+  { ipa: "/ˌedʒuˈkeɪʃn/", ans: "education", opts: ["education", "celebration", "generation", "communication"], mean: "giáo dục" },
+  { ipa: "/ˌjuːnɪˈvɜːsəti/", ans: "university", opts: ["university", "opportunity", "community", "activity"], mean: "trường đại học" },
+  { ipa: "/fəˈtɒɡrəfi/", ans: "photography", opts: ["photography", "geography", "biography", "philosophy"], mean: "nhiếp ảnh" },
+  { ipa: "/kəˈmjuːnəti/", ans: "community", opts: ["community", "opportunity", "security", "authority"], mean: "cộng đồng" },
+  { ipa: "/ˌɒpəˈtjuːnəti/", ans: "opportunity", opts: ["opportunity", "community", "university", "possibility"], mean: "cơ hội" },
+  { ipa: "/ˈtempərətʃə(r)/", ans: "temperature", opts: ["temperature", "literature", "furniture", "agriculture"], mean: "nhiệt độ" },
+  { ipa: "/ˈlɪtrətʃə(r)/", ans: "literature", opts: ["literature", "temperature", "signature", "manufacture"], mean: "văn học" }
+];
+
+// --- A2: 50 CÂU PHÁT ÂM -S/-ES & -ED ---
+const RAW_A2 = [
+  // 20 câu -s/-es từ file
+  { opts: ["stop<u>s</u>", "cook<u>s</u>", "laugh<u>s</u>", "play<u>s</u>"], ans: "plays", exp: "'plays' phát âm là /z/, các từ còn lại tận cùng là /p/, /k/, /f/ phát âm là /s/." },
+  { opts: ["watch<u>es</u>", "miss<u>es</u>", "fix<u>es</u>", "walk<u>s</u>"], ans: "walks", exp: "'walks' phát âm là /s/, các từ còn lại phát âm là /ɪz/." },
+  { opts: ["love<u>s</u>", "read<u>s</u>", "help<u>s</u>", "clean<u>s</u>"], ans: "helps", exp: "'helps' tận cùng là /p/ phát âm là /s/, các từ còn lại phát âm là /z/." },
+  { opts: ["drive<u>s</u>", "call<u>s</u>", "wait<u>s</u>", "sing<u>s</u>"], ans: "waits", exp: "'waits' tận cùng là /t/ phát âm là /s/, các từ còn lại phát âm là /z/." },
+  { opts: ["wash<u>es</u>", "chang<u>es</u>", "danc<u>es</u>", "book<u>s</u>"], ans: "books", exp: "'books' phát âm là /s/, các từ còn lại tận cùng là âm gió phát âm là /ɪz/." },
+  { opts: ["open<u>s</u>", "pass<u>es</u>", "brush<u>es</u>", "match<u>es</u>"], ans: "opens", exp: "'opens' phát âm là /z/, các từ còn lại phát âm là /ɪz/." },
+  { opts: ["map<u>s</u>", "kiss<u>es</u>", "teach<u>es</u>", "manag<u>es</u>"], ans: "maps", exp: "'maps' phát âm là /s/, các từ còn lại phát âm là /ɪz/." },
+  { opts: ["lamp<u>s</u>", "roof<u>s</u>", "dream<u>s</u>", "month<u>s</u>"], ans: "dreams", exp: "'dreams' phát âm là /z/, các từ còn lại tận cùng là /p/, /f/, /θ/ phát âm là /s/." },
+  { opts: ["dream<u>s</u>", "sleep<u>s</u>", "keep<u>s</u>", "cat<u>s</u>"], ans: "dreams", exp: "'dreams' phát âm là /z/, các từ còn lại phát âm là /s/." },
+  { opts: ["work<u>s</u>", "leave<u>s</u>", "swim<u>s</u>", "run<u>s</u>"], ans: "works", exp: "'works' tận cùng là /k/ phát âm là /s/, các từ còn lại phát âm là /z/." },
+  { opts: ["stop<u>s</u>", "laugh<u>s</u>", "kiss<u>es</u>", "cough<u>s</u>"], ans: "kisses", exp: "'kisses' phát âm là /ɪz/, các từ còn lại phát âm là /s/." },
+  { opts: ["dog<u>s</u>", "pen<u>s</u>", "hat<u>s</u>", "door<u>s</u>"], ans: "hats", exp: "'hats' phát âm là /s/, các từ còn lại phát âm là /z/." },
+  { opts: ["teach<u>es</u>", "help<u>s</u>", "cook<u>s</u>", "speak<u>s</u>"], ans: "teaches", exp: "'teaches' phát âm là /ɪz/, các từ còn lại phát âm là /s/." },
+  { opts: ["walk<u>s</u>", "fix<u>es</u>", "talk<u>s</u>", "unit<u>s</u>"], ans: "fixes", exp: "'fixes' phát âm là /ɪz/, các từ còn lại phát âm là /s/." },
+  { opts: ["play<u>s</u>", "chang<u>es</u>", "wear<u>s</u>", "buy<u>s</u>"], ans: "changes", exp: "'changes' phát âm là /ɪz/, các từ còn lại phát âm là /z/." },
+  { opts: ["swim<u>s</u>", "danc<u>es</u>", "feed<u>s</u>", "learn<u>s</u>"], ans: "dances", exp: "'dances' phát âm là /ɪz/, các từ còn lại phát âm là /z/." },
+  { opts: ["run<u>s</u>", "give<u>s</u>", "smell<u>s</u>", "finish<u>es</u>"], ans: "finishes", exp: "'finishes' phát âm là /ɪz/, các từ còn lại phát âm là /z/." },
+  { opts: ["sing<u>s</u>", "wish<u>es</u>", "play<u>s</u>", "find<u>s</u>"], ans: "wishes", exp: "'wishes' phát âm là /ɪz/, các từ còn lại phát âm là /z/." },
+  { opts: ["come<u>s</u>", "listen<u>s</u>", "build<u>s</u>", "catch<u>es</u>"], ans: "catches", exp: "'catches' phát âm là /ɪz/, các từ còn lại phát âm là /z/." },
+  { opts: ["drive<u>s</u>", "manag<u>es</u>", "stay<u>s</u>", "feel<u>s</u>"], ans: "manages", exp: "'manages' phát âm là /ɪz/, các từ còn lại phát âm là /z/." },
+  // 20 câu -ed từ file
+  { opts: ["want<u>ed</u>", "need<u>ed</u>", "decid<u>ed</u>", "walk<u>ed</u>"], ans: "walked", exp: "'walked' phát âm là /t/, các từ còn lại phát âm là /ɪd/." },
+  { opts: ["stopp<u>ed</u>", "look<u>ed</u>", "wash<u>ed</u>", "play<u>ed</u>"], ans: "played", exp: "'played' phát âm là /d/, các từ còn lại phát âm là /t/." },
+  { opts: ["clean<u>ed</u>", "open<u>ed</u>", "miss<u>ed</u>", "rain<u>ed</u>"], ans: "missed", exp: "'missed' phát âm là /t/, các từ còn lại phát âm là /d/." },
+  { opts: ["listen<u>ed</u>", "lov<u>ed</u>", "cook<u>ed</u>", "liv<u>ed</u>"], ans: "cooked", exp: "'cooked' phát âm là /t/, các từ còn lại phát âm là /d/." },
+  { opts: ["watch<u>ed</u>", "miss<u>ed</u>", "brush<u>ed</u>", "land<u>ed</u>"], ans: "landed", exp: "'landed' phát âm là /ɪd/, các từ còn lại phát âm là /t/." },
+  { opts: ["stay<u>ed</u>", "invit<u>ed</u>", "start<u>ed</u>", "visit<u>ed</u>"], ans: "stayed", exp: "'stayed' phát âm là /d/, các từ còn lại phát âm là /ɪd/." },
+  { opts: ["book<u>ed</u>", "wait<u>ed</u>", "end<u>ed</u>", "shout<u>ed</u>"], ans: "booked", exp: "'booked' phát âm là /t/, các từ còn lại phát âm là /ɪd/." },
+  { opts: ["hop<u>ed</u>", "ask<u>ed</u>", "learn<u>ed</u>", "danc<u>ed</u>"], ans: "learned", exp: "'learned' phát âm là /d/, các từ còn lại phát âm là /t/." },
+  { opts: ["arriv<u>ed</u>", "kiss<u>ed</u>", "talk<u>ed</u>", "pass<u>ed</u>"], ans: "arrived", exp: "'arrived' phát âm là /d/, các từ còn lại phát âm là /t/." },
+  { opts: ["invit<u>ed</u>", "call<u>ed</u>", "enjoy<u>ed</u>", "offer<u>ed</u>"], ans: "invited", exp: "'invited' phát âm là /ɪd/, các từ còn lại phát âm là /d/." },
+  { opts: ["work<u>ed</u>", "help<u>ed</u>", "hat<u>ed</u>", "laugh<u>ed</u>"], ans: "hated", exp: "'hated' phát âm là /ɪd/, các từ còn lại phát âm là /t/." },
+  { opts: ["clos<u>ed</u>", "travel<u>ed</u>", "need<u>ed</u>", "sav<u>ed</u>"], ans: "needed", exp: "'needed' phát âm là /ɪd/, các từ còn lại phát âm là /d/." },
+  { opts: ["paint<u>ed</u>", "fix<u>ed</u>", "jump<u>ed</u>", "check<u>ed</u>"], ans: "painted", exp: "'painted' phát âm là /ɪd/, các từ còn lại phát âm là /t/." },
+  { opts: ["bak<u>ed</u>", "decid<u>ed</u>", "pack<u>ed</u>", "push<u>ed</u>"], ans: "decided", exp: "'decided' phát âm là /ɪd/, các từ còn lại phát âm là /t/." },
+  { opts: ["call<u>ed</u>", "count<u>ed</u>", "clean<u>ed</u>", "follow<u>ed</u>"], ans: "counted", exp: "'counted' phát âm là /ɪd/, các từ còn lại phát âm là /d/." },
+  { opts: ["plann<u>ed</u>", "act<u>ed</u>", "mov<u>ed</u>", "stay<u>ed</u>"], ans: "acted", exp: "'acted' phát âm là /ɪd/, các từ còn lại phát âm là /d/." },
+  { opts: ["dropp<u>ed</u>", "typ<u>ed</u>", "cross<u>ed</u>", "damag<u>ed</u>"], ans: "damaged", exp: "'damaged' tận cùng là /dʒ/ phát âm là /d/, các từ còn lại phát âm là /t/." },
+  { opts: ["answer<u>ed</u>", "rest<u>ed</u>", "borrow<u>ed</u>", "perform<u>ed</u>"], ans: "rested", exp: "'rested' phát âm là /ɪd/, các từ còn lại phát âm là /d/." },
+  { opts: ["match<u>ed</u>", "lock<u>ed</u>", "kick<u>ed</u>", "add<u>ed</u>"], ans: "added", exp: "'added' phát âm là /ɪd/, các từ còn lại phát âm là /t/." },
+  { opts: ["return<u>ed</u>", "tast<u>ed</u>", "prepar<u>ed</u>", "allow<u>ed</u>"], ans: "tasted", exp: "'tasted' phát âm là /ɪd/, các từ còn lại phát âm là /d/." },
+  // 10 câu bổ sung cho đủ 50 câu
+  { opts: ["bag<u>s</u>", "kid<u>s</u>", "day<u>s</u>", "parent<u>s</u>"], ans: "parents", exp: "'parents' tận cùng là /t/ phát âm là /s/, các từ còn lại phát âm là /z/." },
+  { opts: ["dish<u>es</u>", "orang<u>es</u>", "experienc<u>es</u>", "table<u>s</u>"], ans: "tables", exp: "'tables' phát âm là /z/, các từ còn lại phát âm là /ɪz/." },
+  { opts: ["cliff<u>s</u>", "photograph<u>s</u>", "belief<u>s</u>", "leave<u>s</u>"], ans: "leaves", exp: "'leaves' tận cùng là /v/ phát âm là /z/, các từ còn lại tận cùng là /f/ phát âm là /s/." },
+  { opts: ["box<u>es</u>", "class<u>es</u>", "potato<u>es</u>", "finish<u>es</u>"], ans: "potatoes", exp: "'potatoes' tận cùng là nguyên âm phát âm là /z/, các từ còn lại phát âm là /ɪz/." },
+  { opts: ["breath<u>s</u>", "path<u>s</u>", "month<u>s</u>", "cloth<u>es</u>"], ans: "clothes", exp: "'clothes' phát âm là /z/, các từ còn lại tận cùng là /θ/ phát âm là /s/." },
+  { opts: ["knoc<u>ked</u>", "naked", "cook<u>ed</u>", "walk<u>ed</u>"], ans: "naked", exp: "'naked' là tính từ bất quy tắc phát âm là /ɪd/, các từ còn lại phát âm là /t/." },
+  { opts: ["provid<u>ed</u>", "pollut<u>ed</u>", "protect<u>ed</u>", "reduc<u>ed</u>"], ans: "reduced", exp: "'reduced' tận cùng là /s/ phát âm là /t/, các từ còn lại phát âm là /ɪd/." },
+  { opts: ["explain<u>ed</u>", "disappoint<u>ed</u>", "prepar<u>ed</u>", "interview<u>ed</u>"], ans: "disappointed", exp: "'disappointed' phát âm là /ɪd/, các từ còn lại phát âm là /d/." },
+  { opts: ["develop<u>ed</u>", "finis<u>hed</u>", "puni<u>shed</u>", "includ<u>ed</u>"], ans: "included", exp: "'included' phát âm là /ɪd/, các từ còn lại phát âm là /t/." },
+  { opts: ["suggest<u>ed</u>", "collect<u>ed</u>", "impress<u>ed</u>", "arrest<u>ed</u>"], ans: "impressed", exp: "'impressed' phát âm là /t/, các từ còn lại phát âm là /ɪd/." }
+];
+
+// --- A3: 50 CÂU TRỌNG ÂM (Từ file gốc Chapter 2) ---
+const RAW_A3 = [
+  { opts: ["answer", "believe", "enjoy", "repeat"], ans: "answer", exp: "'answer' /ˈɑːnsə/ nhấn âm 1 (danh/động từ), các từ còn lại là động từ 2 âm tiết nhấn âm 2." },
+  { opts: ["mountain", "village", "provide", "pretty"], ans: "provide", exp: "'provide' /prəˈvaɪd/ là động từ nhấn âm 2, các từ còn lại là danh/tính từ nhấn âm 1." },
+  { opts: ["machine", "village", "bottle", "summer"], ans: "machine", exp: "'machine' /məˈʃiːn/ nhấn âm 2, các từ còn lại là danh từ 2 âm tiết nhấn âm 1." },
+  { opts: ["polite", "awful", "careful", "happy"], ans: "polite", exp: "'polite' /pəˈlaɪt/ nhấn âm 2, các tính từ còn lại nhấn âm 1." },
+  { opts: ["father", "teacher", "student", "mistake"], ans: "mistake", exp: "'mistake' /mɪˈsteɪk/ nhấn âm 2, các danh từ còn lại nhấn âm 1." },
+  { opts: ["correct", "narrow", "heavy", "clever"], ans: "correct", exp: "'correct' /kəˈrekt/ nhấn âm 2, các từ còn lại nhấn âm 1." },
+  { opts: ["doctor", "dental", "police", "patient"], ans: "police", exp: "'police' /pəˈliːs/ nhấn âm 2, các từ còn lại nhấn âm 1." },
+  { opts: ["begin", "visit", "finish", "open"], ans: "begin", exp: "'begin' /bɪˈɡɪn/ bắt đầu bằng be- nhấn âm 2, các động từ còn lại có âm cuối nhẹ nên nhấn âm 1." },
+  { opts: ["borrow", "agree", "listen", "happen"], ans: "agree", exp: "'agree' /əˈɡriː/ nhấn âm 2, các từ còn lại nhấn âm 1." },
+  { opts: ["become", "refuse", "remind", "offer"], ans: "offer", exp: "'offer' /ˈɒfə/ nhấn âm 1, các từ còn lại bắt đầu bằng be-, re- nhấn âm 2." },
+  { opts: ["family", "animal", "computer", "elephant"], ans: "computer", exp: "'computer' /kəmˈpjuːtə/ nhấn âm 2, các từ còn lại nhấn âm 1." },
+  { opts: ["memory", "potato", "cinema", "history"], ans: "potato", exp: "'potato' /pəˈteɪtəʊ/ nhấn âm 2, các từ còn lại nhấn âm 1." },
+  { opts: ["delicious", "expensive", "beautiful", "terrific"], ans: "beautiful", exp: "'beautiful' /ˈbjuːtɪfl/ nhấn âm 1, các từ còn lại nhấn âm 2." },
+  { opts: ["difficult", "popular", "dangerous", "important"], ans: "important", exp: "'important' /ɪmˈpɔːtnt/ nhấn âm 2, các từ còn lại nhấn âm 1." },
+  { opts: ["attention", "energy", "exercise", "hospital"], ans: "attention", exp: "'attention' /əˈtenʃn/ có đuôi -tion nhấn âm 2, các từ còn lại nhấn âm 1." },
+  { opts: ["regular", "confident", "relative", "amazing"], ans: "amazing", exp: "'amazing' /əˈmeɪzɪŋ/ nhấn âm 2, các từ còn lại nhấn âm 1." },
+  { opts: ["tropical", "volcanic", "athletic", "specific"], ans: "tropical", exp: "'tropical' /ˈtrɒpɪkl/ nhấn âm 1, các từ còn lại có đuôi -ic nhấn âm 2." },
+  { opts: ["holiday", "yesterday", "tomorrow", "furniture"], ans: "tomorrow", exp: "'tomorrow' /təˈmɒrəʊ/ nhấn âm 2, các từ còn lại nhấn âm 1." },
+  { opts: ["character", "collection", "direction", "position"], ans: "character", exp: "'character' /ˈkærəktə/ nhấn âm 1, các từ còn lại có đuôi -tion nhấn âm 2." },
+  { opts: ["wonderful", "positive", "negative", "dependent"], ans: "dependent", exp: "'dependent' /dɪˈpendənt/ nhấn âm 2, các từ còn lại nhấn âm 1." },
+  { opts: ["electric", "romantic", "fantastic", "physical"], ans: "physical", exp: "'physical' /ˈfɪzɪkl/ nhấn âm 1, các từ còn lại nhấn âm 2." },
+  { opts: ["national", "separate", "cultural", "unusual"], ans: "unusual", exp: "'unusual' /ʌnˈjuːʒuəl/ nhấn âm 2, các từ còn lại nhấn âm 1." },
+  { opts: ["scientist", "dictionary", "influence", "condition"], ans: "condition", exp: "'condition' /kənˈdɪʃn/ có đuôi -tion nhấn âm 2, các từ còn lại nhấn âm 1." },
+  { opts: ["balcony", "customer", "delivery", "capital"], ans: "delivery", exp: "'delivery' /dɪˈlɪvəri/ nhấn âm 2, các từ còn lại nhấn âm 1." },
+  { opts: ["generous", "suspicious", "marvelous", "humorous"], ans: "suspicious", exp: "'suspicious' /səˈspɪʃəs/ có đuôi -ious nhấn âm 2, các từ còn lại nhấn âm 1." },
+  { opts: ["designer", "passenger", "messenger", "scavenger"], ans: "designer", exp: "'designer' /dɪˈzaɪnə/ nhấn âm 2, các từ còn lại nhấn âm 1." },
+  { opts: ["activate", "dedicate", "advertise", "determine"], ans: "determine", exp: "'determine' /dɪˈtɜːmɪn/ nhấn âm 2, các từ còn lại có đuôi -ate, -ise nhấn âm 1." },
+  { opts: ["Japanese", "lemonade", "seventeen", "buffalo"], ans: "buffalo", exp: "'buffalo' /ˈbʌfələʊ/ nhấn âm 1, các từ còn lại có đuôi -ese, -ade, -een nhấn âm 3." },
+  { opts: ["together", "whenever", "however", "yesterday"], ans: "yesterday", exp: "'yesterday' /ˈjestədeɪ/ nhấn âm 1, các từ còn lại nhấn âm 2." },
+  { opts: ["organize", "introduce", "modernize", "criticize"], ans: "introduce", exp: "'introduce' /ˌɪntrəˈdjuːs/ nhấn âm 3, các từ còn lại đuôi -ize nhấn âm 1." },
+  { opts: ["summary", "selection", "solution", "survival"], ans: "summary", exp: "'summary' /ˈsʌməri/ nhấn âm 1, các từ còn lại nhấn âm 2." },
+  { opts: ["accident", "disaster", "industry", "chemistry"], ans: "disaster", exp: "'disaster' /dɪˈzɑːstə/ nhấn âm 2, các từ còn lại nhấn âm 1." },
+  { opts: ["gallery", "luxury", "museum", "pottery"], ans: "museum", exp: "'museum' /mjuˈziːəm/ nhấn âm 2, các từ còn lại nhấn âm 1." },
+  { opts: ["sensitive", "sensible", "sentence", "sensation"], ans: "sensation", exp: "'sensation' /senˈseɪʃn/ có đuôi -tion nhấn âm 2, các từ còn lại nhấn âm 1." },
+  { opts: ["magazine", "refugee", "employee", "evidence"], ans: "evidence", exp: "'evidence' /ˈevɪdəns/ nhấn âm 1, các từ còn lại nhấn âm 3." },
+  { opts: ["information", "education", "university", "photography"], ans: "photography", exp: "'photography' /fəˈtɒɡrəfi/ nhấn âm 2, các từ còn lại nhấn âm 3." },
+  { opts: ["activity", "original", "independent", "communicate"], ans: "independent", exp: "'independent' /ˌɪndɪˈpendənt/ nhấn âm 3, các từ còn lại nhấn âm 2." },
+  { opts: ["traditional", "unnecessary", "effectively", "celebration"], ans: "celebration", exp: "'celebration' /ˌselɪˈbreɪʃn/ có đuôi -tion nhấn âm 3, các từ còn lại nhấn âm 2." },
+  { opts: ["biology", "geography", "accidental", "experience"], ans: "accidental", exp: "'accidental' /ˌæksɪˈdentl/ nhấn âm 3, các từ còn lại nhấn âm 2." },
+  { opts: ["competition", "application", "optimistic", "variety"], ans: "variety", exp: "'variety' /vəˈraɪəti/ có đuôi -ety nhấn âm 2, các từ còn lại nhấn âm 3." },
+  { opts: ["historical", "technology", "environment", "operation"], ans: "operation", exp: "'operation' /ˌɒpəˈreɪʃn/ nhấn âm 3, các từ còn lại nhấn âm 2." },
+  { opts: ["convenient", "identify", "population", "professional"], ans: "population", exp: "'population' /ˌpɒpjuˈleɪʃn/ nhấn âm 3, các từ còn lại nhấn âm 2." },
+  { opts: ["preparation", "expectation", "available", "recognition"], ans: "available", exp: "'available' /əˈveɪləbl/ nhấn âm 2, các từ còn lại có đuôi -tion nhấn âm 3." },
+  { opts: ["effectively", "immediately", "particularly", "scientific"], ans: "scientific", exp: "'scientific' /ˌsaɪənˈtɪfɪk/ có đuôi -ic nhấn âm 3, các từ còn lại nhấn âm 2." },
+  { opts: ["conversation", "entertainment", "destination", "community"], ans: "community", exp: "'community' /kəˈmjuːnəti/ có đuôi -ity nhấn âm 2, các từ còn lại nhấn âm 3." },
+  { opts: ["politician", "economy", "emergency", "discovery"], ans: "politician", exp: "'politician' /ˌpɒlɪˈtɪʃn/ có đuôi -ian nhấn âm 3, các từ còn lại nhấn âm 2." },
+  { opts: ["possibility", "nationality", "dictionary", "electricity"], ans: "dictionary", exp: "'dictionary' /ˈdɪkʃənri/ nhấn âm 1, các từ còn lại có đuôi -ity nhấn âm 3." },
+  { opts: ["individual", "certification", "invitation", "understanding"], ans: "certification", exp: "'certification' /ˌsɜːtɪfɪˈkeɪʃn/ nhấn âm 4, các từ còn lại nhấn âm 3." },
+  { opts: ["discovery", "developable", "remarkable", "mathematical"], ans: "mathematical", exp: "'mathematical' /ˌmæθəˈmætɪkl/ nhấn âm 3, các từ còn lại nhấn âm 2." },
+  { opts: ["electronic", "aerodynamic", "geographical", "enthusiastic"], ans: "electronic", exp: "'electronic' /ɪˌlekˈtrɒnɪk/ nhấn âm 3, các từ còn lại (geographical nhấn âm 3, nhưng hãy xét cặp: electronic nhấn 3 vs enthusiastic nhấn 4 -> 'enthusiastic' /ɪnˌθjuːziˈæstɪk/ nhấn âm 4 khác với các từ nhấn âm 3)." }
+];
+// Chuẩn hóa câu 50 của A3 cho thật chính xác:
+RAW_A3[49] = { opts: ["electronic", "geographical", "academic", "enthusiastic"], ans: "enthusiastic", exp: "'enthusiastic' /ɪnˌθjuːziˈæstɪk/ có đuôi -ic nhấn âm 4, các từ còn lại nhấn âm 3." };
+
+// --- B1: 50 CÂU WORD FORMATION (Từ file gốc Chapter 3) ---
+const RAW_B1 = [
+  { sent: "She is very ________ about her upcoming trip to Japan.", root: "EXCITE", ans: "excited", opts: ["excited", "exciting", "excitement", "excite"], exp: "Cảm xúc của người (She is...) dùng tính từ đuôi -ed → excited." },
+  { sent: "We had a long ________ about our future plans last night.", root: "DISCUSS", ans: "discussion", opts: ["discussion", "discuss", "discussed", "discussing"], exp: "Sau mạo từ 'a' và tính từ 'long' cần một Danh từ → discussion." },
+  { sent: "Walking alone late at night in this area can be ________.", root: "DANGER", ans: "dangerous", opts: ["dangerous", "danger", "endanger", "dangerously"], exp: "Sau 'can be' cần một Tính từ chỉ tính chất → dangerous." },
+  { sent: "Smoking is extremely ________ to your health.", root: "HARM", ans: "harmful", opts: ["harmful", "harmless", "harm", "harmfully"], exp: "Sau trạng từ 'extremely' và to be 'is' cần Tính từ mang nghĩa có hại → harmful." },
+  { sent: "To my ________, she passed the exam with perfect scores.", root: "AMAZE", ans: "amazement", opts: ["amazement", "amazing", "amazed", "amaze"], exp: "Sau tính từ sở hữu 'my' (Cấu trúc: To one's + N: Trước sự ngạc nhiên của ai) → amazement." },
+  { sent: "He is a very ________ driver; he has never had an accident.", root: "CARE", ans: "careful", opts: ["careful", "careless", "carefully", "caring"], exp: "Trước danh từ 'driver' cần Tính từ; ngữ cảnh 'chưa từng gặp tai nạn' → careful (cẩn thận)." },
+  { sent: "It was very ________ of him to leave the door unlocked all night.", root: "CARE", ans: "careless", opts: ["careless", "careful", "carelessly", "carelessness"], exp: "Để cửa không khóa suốt đêm là bất cẩn → dùng tính từ mang nghĩa phủ định careless." },
+  { sent: "Her sudden ________ shocked everyone in the family.", root: "DIE", ans: "death", opts: ["death", "dead", "dying", "die"], exp: "Sau tính từ sở hữu 'Her' và tính từ 'sudden' cần Danh từ → death (cái chết)." },
+  { sent: "Learning a foreign language requires a lot of ________.", root: "PATIENT", ans: "patience", opts: ["patience", "patient", "impatient", "patiently"], exp: "Sau lượng từ 'a lot of' cần Danh từ → patience (sự kiên nhẫn)." },
+  { sent: "The teacher gave us clear ________ on how to do the homework.", root: "INSTRUCT", ans: "instructions", opts: ["instructions", "instruct", "instructor", "instructive"], exp: "Sau tính từ 'clear' cần Danh từ chỉ sự hướng dẫn → instructions." },
+  { sent: "You should be ________ when crossing this busy street.", root: "ATTENTION", ans: "attentive", opts: ["attentive", "attention", "attentively", "attend"], exp: "Sau 'should be' cần Tính từ → attentive (chú ý, cẩn trọng)." },
+  { sent: "Although they are twins, they look completely ________.", root: "DIFFER", ans: "different", opts: ["different", "difference", "differently", "differ"], exp: "Sau linking verb 'look' và trạng từ 'completely' cần Tính từ → different." },
+  { sent: "The internet has changed the way we ________ with each other.", root: "COMMUNICATION", ans: "communicate", opts: ["communicate", "communication", "communicative", "communicator"], exp: "Sau chủ ngữ 'we' cần một Động từ nguyên mẫu ở hiện tại → communicate." },
+  { sent: "This knife is ________. It cannot cut anything at all!", root: "USE", ans: "useless", opts: ["useless", "useful", "usable", "use"], exp: "Không cắt được gì cả → vô dụng, dùng tính từ đuôi -less → useless." },
+  { sent: "The local people are always very ________ and welcoming to tourists.", root: "FRIEND", ans: "friendly", opts: ["friendly", "friendship", "unfriendly", "friend"], exp: "Cấu trúc song song với tính từ 'welcoming' sau to be → tính từ friendly (thân thiện)." },
+  { sent: "I bought this laptop because it is highly ________.", root: "RELY", ans: "reliable", opts: ["reliable", "rely", "reliability", "reliably"], exp: "Sau to be 'is' và trạng từ 'highly' cần Tính từ → reliable (đáng tin cậy)." },
+  { sent: "It is ________ to park your car in front of the hospital gate.", root: "LEGAL", ans: "illegal", opts: ["illegal", "legal", "legally", "illegally"], exp: "Đỗ xe trước cổng bệnh viện là trái phép → dùng tính từ phủ định illegal." },
+  { sent: "We need to find a ________ to this difficult math problem.", root: "SOLVE", ans: "solution", opts: ["solution", "solve", "soluble", "unsolved"], exp: "Sau mạo từ 'a' cần một Danh từ → solution (giải pháp)." },
+  { sent: "Air pollution has reached a ________ level in this city.", root: "WORRY", ans: "worrying", opts: ["worrying", "worried", "worry", "worryingly"], exp: "Bổ nghĩa cho danh từ chỉ vật 'level' (mức độ đáng lo ngại) → dùng tính từ đuôi -ing: worrying." },
+  { sent: "Fast food is delicious but very ________ if you eat it daily.", root: "HEALTH", ans: "unhealthy", opts: ["unhealthy", "healthy", "health", "healthily"], exp: "Liên từ 'but' chỉ sự đối lập với 'delicious', ăn đồ ăn nhanh hàng ngày sẽ không tốt cho sức khỏe → unhealthy." },
+  { sent: "The children played ________ on the beach all afternoon.", root: "HAPPY", ans: "happily", opts: ["happily", "happy", "happiness", "unhappy"], exp: "Bổ nghĩa cho động từ thường 'played' cần Trạng từ → happily." },
+  { sent: "My computer crashed, and I lost all my ________ data.", root: "IMPORTANCE", ans: "important", opts: ["important", "importance", "importantly", "unimportant"], exp: "Đứng trước danh từ 'data' cần một Tính từ → important." },
+  { sent: "He is so ________ that he never shares anything with others.", root: "SELF", ans: "selfish", opts: ["selfish", "selfless", "selfishly", "selfishness"], exp: "Không bao giờ chia sẻ gì với ai → ích kỷ (tính từ sau to be) → selfish." },
+  { sent: "The hotel we stayed at was very clean and ________.", root: "COMFORT", ans: "comfortable", opts: ["comfortable", "uncomfortable", "comfort", "comfortably"], exp: "Song song với tính từ tích cực 'clean' → comfortable (thoải mái)." },
+  { sent: "After sitting in that hard plastic chair for hours, I felt ________.", root: "COMFORT", ans: "uncomfortable", opts: ["uncomfortable", "comfortable", "comfort", "discomfort"], exp: "Ngồi ghế nhựa cứng hàng giờ liền khiến cơ thể không thoải mái → uncomfortable." },
+  { sent: "She gave a wonderful ________ at the school concert yesterday.", root: "PERFORM", ans: "performance", opts: ["performance", "performer", "perform", "performing"], exp: "Sau mạo từ 'a' và tính từ 'wonderful' cần Danh từ chỉ màn trình diễn → performance." },
+  { sent: "The manager made a sudden ________ to close the branch office.", root: "DECIDE", ans: "decision", opts: ["decision", "decide", "decisive", "decided"], exp: "Cụm cố định 'make a (sudden) decision': đưa ra quyết định → decision." },
+  { sent: "The price of electricity has increased ________ this month.", root: "SIGNIFICANT", ans: "significantly", opts: ["significantly", "significant", "significance", "insignificant"], exp: "Bổ nghĩa cho động từ thường 'has increased' cần Trạng từ → significantly (một cách đáng kể)." },
+  { sent: "The weather was so ________ that we had to cancel our picnic.", root: "PREDICT", ans: "unpredictable", opts: ["unpredictable", "predictable", "prediction", "predict"], exp: "Thời tiết thất thường/không thể đoán trước nên phải hủy dã ngoại → unpredictable." },
+  { sent: "Many people think that money cannot buy ________.", root: "HAPPY", ans: "happiness", opts: ["happiness", "happy", "happily", "unhappy"], exp: "Làm tân ngữ cho động từ 'buy' cần một Danh từ → happiness (sự hạnh phúc)." },
+  { sent: "It is ________ to climb the mountain without proper equipment.", root: "POSSIBLE", ans: "impossible", opts: ["impossible", "possible", "possibility", "possibly"], exp: "Leo núi mà không có thiết bị phù hợp là điều bất khả thi → impossible." },
+  { sent: "The scientist made an amazing ________ about space travel.", root: "DISCOVER", ans: "discovery", opts: ["discovery", "discover", "discoverer", "discovered"], exp: "Sau 'an amazing' cần một Danh từ số ít → discovery (khám phá)." },
+  { sent: "He felt extremely ________ when he failed the driving test again.", root: "DISAPPOINT", ans: "disappointed", opts: ["disappointed", "disappointing", "disappointment", "disappoint"], exp: "Chỉ cảm xúc của người (He felt...) dùng tính từ đuôi -ed → disappointed." },
+  { sent: "Our new English teacher is very ________ and always helps us.", root: "ENERGY", ans: "energetic", opts: ["energetic", "energy", "energetically", "energize"], exp: "Sau 'is very' cần một Tính từ → energetic (tràn đầy năng lượng)." },
+  { sent: "He spoke so ________ that nobody could understand his speech.", root: "QUICK", ans: "quickly", opts: ["quickly", "quick", "quickness", "quicken"], exp: "Bổ nghĩa cho động từ thường 'spoke' trong cấu trúc 'so + adv + that' → quickly." },
+  { sent: "It was highly ________ of him to yell at his elderly grandparents.", root: "POLITE", ans: "impolite", opts: ["impolite", "polite", "politely", "politeness"], exp: "Quát tháo ông bà lớn tuổi là hành vi bất lịch sự → impolite." },
+  { sent: "We need to ________ our classroom before the New Year holiday.", root: "DECORATION", ans: "decorate", opts: ["decorate", "decoration", "decorative", "decorator"], exp: "Sau 'need to' cần một Động từ nguyên mẫu → decorate (trang trí)." },
+  { sent: "My sister wants to become a professional ________ in the future.", root: "PHOTOGRAPH", ans: "photographer", opts: ["photographer", "photography", "photographic", "photograph"], exp: "Chỉ nghề nghiệp của người ('become a professional...') → photographer (nhiếp ảnh gia)." },
+  { sent: "Regular exercise can help you improve your physical ________.", root: "STRONG", ans: "strength", opts: ["strength", "strong", "strengthen", "strongly"], exp: "Sau tính từ 'physical' cần một Danh từ → strength (sức mạnh, thể lực)." },
+  { sent: "The noise from the construction site was very ________.", root: "ANNOY", ans: "annoying", opts: ["annoying", "annoyed", "annoyance", "annoy"], exp: "Miêu tả bản chất của sự vật ('The noise') dùng tính từ đuôi -ing → annoying (gây khó chịu)." },
+  { sent: "I had a terrible ________ with my roommate about the house chores.", root: "ARGUE", ans: "argument", opts: ["argument", "argue", "arguable", "arguably"], exp: "Sau 'a terrible' cần một Danh từ → argument (cuộc tranh cãi)." },
+  { sent: "Be honest! Tell me the ________ about what happened yesterday.", root: "TRUE", ans: "truth", opts: ["truth", "true", "truly", "truthful"], exp: "Sau mạo từ 'the' cần một Danh từ (tell the truth: nói sự thật) → truth." },
+  { sent: "________, nobody was injured in the serious car accident.", root: "FORTUNE", ans: "Fortunately", opts: ["Fortunately", "Unfortunate", "Unfortunately", "Fortune"], exp: "Đứng đầu câu trước dấu phẩy cần Trạng từ; 'không ai bị thương' là điều may mắn → Fortunately." },
+  { sent: "The natural ________ of this island attracts millions of visitors.", root: "BEAUTIFUL", ans: "beauty", opts: ["beauty", "beautiful", "beautify", "beautifully"], exp: "Sau tính từ 'natural' và trước 'of' cần một Danh từ làm chủ ngữ → beauty (vẻ đẹp)." },
+  { sent: "Her parents always ________ her to study hard for the exam.", root: "COURAGE", ans: "encourage", opts: ["encourage", "courage", "courageous", "discourage"], exp: "Sau chủ ngữ 'Her parents' và trạng từ 'always' cần Động từ (encourage sb to V) → encourage." },
+  { sent: "The government is planning to ________ the old highway next year.", root: "WIDE", ans: "widen", opts: ["widen", "wide", "width", "widely"], exp: "Sau 'planning to' cần Động từ nguyên mẫu → widen (mở rộng)." },
+  { sent: "I hate waiting in long queues; I am very ________.", root: "PATIENT", ans: "impatient", opts: ["impatient", "patient", "patience", "impatiently"], exp: "Ghét phải xếp hàng chờ đợi lâu → thiếu kiên nhẫn → impatient." },
+  { sent: "The ________ of our village has doubled over the last ten years.", root: "POPULATE", ans: "population", opts: ["population", "populate", "popular", "populated"], exp: "Sau mạo từ 'The' và trước 'of' cần Danh từ → population (dân số)." },
+  { sent: "They got lost because they ________ the map the guide gave them.", root: "UNDERSTAND", ans: "misunderstood", opts: ["misunderstood", "understood", "understandable", "understanding"], exp: "Họ bị lạc đường (quá khứ 'got lost') vì đã hiểu sai bản đồ → misunderstood." },
+  { sent: "Reading a book is a great way to gain more ________.", root: "KNOW", ans: "knowledge", opts: ["knowledge", "know", "knowledgeable", "known"], exp: "Sau 'gain more' cần một Danh từ không đếm được → knowledge (kiến thức)." }
+];
+
+/* ============================================================================
+   3. STATE & ĐIỀU HƯỚNG (NAVIGATION LOGIC)
+============================================================================ */
+let currentModule = 'A1';
+let currentCount = 20;
+let currentMode = 'mcq'; // 'mcq' | 'input' | 'mixed'
+let activeQuestions = [];
+
+const MODULE_META = {
+  A1: { parent: 'secA', parentName: 'A. Học Về Phát Âm', title: 'A.1 – Bảng Phiên Âm Quốc Tế (IPA)', subtitle: 'Lý thuyết 44 âm chuẩn quốc tế & 50 câu bài tập đọc phiên âm đoán từ' },
+  A2: { parent: 'secA', parentName: 'A. Học Về Phát Âm', title: 'A.2 – Quy Tắc Phát Âm Đuôi -s/-es & -ed', subtitle: 'Mẹo ghi nhớ thần tốc & 50 câu phân biệt âm gạch chân' },
+  A3: { parent: 'secA', parentName: 'A. Học Về Phát Âm', title: 'A.3 – Quy Tắc Trọng Âm (Syllable Stress)', subtitle: 'Quy tắc trọng âm từ 2 đến 4+ âm tiết & 50 câu luyện tập chuẩn đề thi' },
+  B1: { parent: 'secB', parentName: 'B. Cấu Tạo Từ', title: 'B.1 – Lý Thuyết & Bài Tập Word Formation', subtitle: 'Vị trí 4 từ loại, bảng hậu tố nhận diện & 50 câu biến đổi từ loại' }
+};
+
+function navigateTo(viewId) {
+  document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+  document.getElementById('view-' + viewId).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  updateBreadcrumb(viewId);
+}
+
+function updateBreadcrumb(viewId) {
+  const bc = document.getElementById('navBreadcrumb');
+  if (viewId === 'home') {
+    bc.innerHTML = `<button class="btn-nav" onclick="navigateTo('home')">🏠 Trang chủ</button>`;
+  } else if (viewId === 'secA') {
+    bc.innerHTML = `
+      <button class="btn-nav" onclick="navigateTo('home')">🏠 Trang chủ</button>
+      <button class="btn-nav">📂 A. Học Về Phát Âm</button>
+    `;
+  } else if (viewId === 'secB') {
+    bc.innerHTML = `
+      <button class="btn-nav" onclick="navigateTo('home')">🏠 Trang chủ</button>
+      <button class="btn-nav">📂 B. Word Formation</button>
+    `;
+  } else if (viewId === 'module') {
+    const meta = MODULE_META[currentModule];
+    bc.innerHTML = `
+      <button class="btn-nav" onclick="navigateTo('home')">🏠 Trang chủ</button>
+      <button class="btn-nav" onclick="navigateTo('${meta.parent}')">⬅ ${meta.parentName}</button>
+    `;
+  }
+}
+
+function openModule(modId) {
+  currentModule = modId;
+  const meta = MODULE_META[modId];
+  document.getElementById('modTitle').textContent = meta.title;
+  document.getElementById('modSubtitle').textContent = meta.subtitle;
+  document.getElementById('contentTheory').innerHTML = THEORY_HTML[modId];
+
+  // Đối với A2 (s/es/ed) và A3 (Stress), dạng chuẩn thi THPT luôn là Trắc nghiệm 4 đáp án A,B,C,D
+  const modeGroup = document.getElementById('modeControlGroup');
+  if (modId === 'A2' || modId === 'A3') {
+    currentMode = 'mcq';
+    modeGroup.style.display = 'none';
+  } else {
+    modeGroup.style.display = 'flex';
+  }
+
+  switchTab('theory');
+  navigateTo('module');
+  renderQuiz();
+}
+
+function switchTab(tab) {
+  const btnT = document.getElementById('btnTabTheory');
+  const btnP = document.getElementById('btnTabPractice');
+  const conT = document.getElementById('contentTheory');
+  const conP = document.getElementById('contentPractice');
+
+  if (tab === 'theory') {
+    btnT.classList.add('active');
+    btnP.classList.remove('active');
+    conT.style.display = 'block';
+    conP.style.display = 'none';
+  } else {
+    btnP.classList.add('active');
+    btnT.classList.remove('active');
+    conP.style.display = 'block';
+    conT.style.display = 'none';
+  }
+}
+
+/* ============================================================================
+   4. BỘ MÁY TẠO ĐỀ, XÁO TRỘN ĐÁP ÁN CÂN BẰNG & CHẤM ĐIỂM
+============================================================================ */
+function shuffleArray(arr) {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+// Hàm sắp xếp phương án sao cho đáp án đúng phân bổ cân bằng tuyệt đối giữa A, B, C, D
+function buildBalancedOptions(optsArray, correctText, targetIndex) {
+  const cleanCorrect = correctText.toLowerCase().trim();
+  let correctItem = optsArray.find(o => o.replace(/<\/?u>/g, '').toLowerCase().trim() === cleanCorrect) || optsArray[0];
+  let distractors = optsArray.filter(o => o !== correctItem);
+  distractors = shuffleArray(distractors);
+
+  const finalOpts = [];
+  let dIdx = 0;
+  for (let i = 0; i < 4; i++) {
+    if (i === targetIndex) {
+      finalOpts.push(correctItem);
+    } else {
+      finalOpts.push(distractors[dIdx++]);
+    }
+  }
+  return finalOpts;
+}
+
+function setQuizCount(cnt) {
+  currentCount = cnt;
+  document.querySelectorAll('.count-pill').forEach(btn => {
+    btn.classList.toggle('active', parseInt(btn.textContent) === cnt);
+  });
+  renderQuiz();
+}
+
+function setQuizMode(mode) {
+  currentMode = mode;
+  document.querySelectorAll('.type-pill').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.mode === mode);
+  });
+  renderQuiz();
+}
+
+function renderQuiz() {
+  document.getElementById('scoreBanner').classList.remove('show');
+  document.getElementById('btnSubmitQuiz').style.display = 'inline-block';
+
+  let sourceBank = [];
+  if (currentModule === 'A1') sourceBank = RAW_A1;
+  else if (currentModule === 'A2') sourceBank = RAW_A2;
+  else if (currentModule === 'A3') sourceBank = RAW_A3;
+  else if (currentModule === 'B1') sourceBank = RAW_B1;
+
+  const picked = shuffleArray(sourceBank).slice(0, currentCount);
+  
+  // Tạo mảng vị trí đáp án đúng cân bằng A(0), B(1), C(2), D(3)
+  let targetIndices = [];
+  for (let i = 0; i < currentCount; i++) {
+    targetIndices.push(i % 4);
+  }
+  targetIndices = shuffleArray(targetIndices);
+
+  const letters = ['A', 'B', 'C', 'D'];
+  activeQuestions = picked.map((item, idx) => {
+    let qType = currentMode;
+    if (currentMode === 'mixed') {
+      qType = (idx % 2 === 0) ? 'mcq' : 'input';
+    }
+    if (currentModule === 'A2' || currentModule === 'A3') {
+      qType = 'mcq';
+    }
+
+    const tIdx = targetIndices[idx];
+    const balancedOpts = buildBalancedOptions(item.opts, item.ans, tIdx);
+
+    let promptHtml = '';
+    let explainText = '';
+
+    if (currentModule === 'A1') {
+      promptHtml = ` Phiên âm <span class="ipa">${item.ipa}</span> tương ứng với từ tiếng Anh nào dưới đây?`;
+      explainText = `Đáp án đúng: <strong>${item.ans}</strong> ${item.ipa} (Nghĩa: <em>${item.mean}</em>).`;
+    } else if (currentModule === 'A2') {
+      promptHtml = `Chọn từ có phần gạch chân phát âm khác với 3 từ còn lại:`;
+      explainText = item.exp;
+    } else if (currentModule === 'A3') {
+      promptHtml = `Chọn từ có vị trí trọng âm chính khác với 3 từ còn lại:`;
+      explainText = item.exp;
+    } else if (currentModule === 'B1') {
+      promptHtml = `${item.sent} <span class="ipa">(${item.root})</span>`;
+      explainText = item.exp;
+    }
+
+    return {
+      index: idx + 1,
+      qType,
+      promptHtml,
+      options: balancedOpts,
+      correctLetter: letters[tIdx],
+      correctText: item.ans,
+      explainText
+    };
+  });
+
+  const container = document.getElementById('quizContainer');
+  container.innerHTML = activeQuestions.map((q, idx) => {
+    if (q.qType === 'mcq') {
+      const optsHtml = q.options.map((opt, oIdx) => {
+        const letCode = letters[oIdx];
+        return `
+          <label class="opt-label" id="lbl-${idx}-${letCode}">
+            <input type="radio" name="q-${idx}" value="${letCode}">
+            <span><strong>${letCode}.</strong> ${opt}</span>
+          </label>
+        `;
+      }).join('');
+      return `
+        <div class="q-item" id="qcard-${idx}">
+          <div class="q-header">
+            <span class="q-num">Câu ${q.index}</span>
+            <div class="q-prompt">${q.promptHtml}</div>
+          </div>
+          <div class="options-grid">${optsHtml}</div>
+          <div class="q-feedback" id="fb-${idx}"></div>
+        </div>
+      `;
+    } else {
+      return `
+        <div class="q-item" id="qcard-${idx}">
+          <div class="q-header">
+            <span class="q-num">Câu ${q.index}</span>
+            <div class="q-prompt">${q.promptHtml}</div>
+          </div>
+          <div>
+            <input type="text" class="text-answer-input" id="inp-${idx}" placeholder="Nhập từ tiếng Anh chính xác..." autocomplete="off">
+          </div>
+          <div class="q-feedback" id="fb-${idx}"></div>
+        </div>
+      `;
+    }
+  }).join('');
+}
+
+function submitQuiz() {
+  let correctCount = 0;
+
+  activeQuestions.forEach((q, idx) => {
+    const card = document.getElementById(`qcard-${idx}`);
+    const fb = document.getElementById(`fb-${idx}`);
+    card.classList.remove('correct-card', 'wrong-card');
+
+    let isCorrect = false;
+    let userAnsDisplay = '';
+
+    if (q.qType === 'mcq') {
+      const checked = document.querySelector(`input[name="q-${idx}"]:checked`);
+      const userVal = checked ? checked.value : null;
+
+      ['A', 'B', 'C', 'D'].forEach(letCode => {
+        const lbl = document.getElementById(`lbl-${idx}-${letCode}`);
+        lbl.classList.remove('opt-correct', 'opt-wrong');
+        if (letCode === q.correctLetter) {
+          lbl.classList.add('opt-correct');
+        } else if (userVal === letCode && userVal !== q.correctLetter) {
+          lbl.classList.add('opt-wrong');
+        }
+      });
+
+      isCorrect = (userVal === q.correctLetter);
+      userAnsDisplay = userVal ? `Bạn chọn <strong>${userVal}</strong>` : `<em>Chưa chọn đáp án</em>`;
+    } else {
+      const inp = document.getElementById(`inp-${idx}`);
+      const rawVal = inp.value.trim().toLowerCase();
+      const targetVal = q.correctText.toLowerCase();
+
+      // Hỗ trợ cả neighbour và neighbor
+      if (rawVal === targetVal || (targetVal === 'neighbour' && rawVal === 'neighbor')) {
+        isCorrect = true;
+      }
+      userAnsDisplay = rawVal ? `Bạn điền: <strong>${inp.value.trim()}</strong>` : `<em>Chưa điền đáp án</em>`;
+    }
+
+    if (isCorrect) {
+      correctCount++;
+      card.classList.add('correct-card');
+      fb.innerHTML = `✅ <strong>Chính xác!</strong> (${userAnsDisplay}) — ${q.explainText}`;
+    } else {
+      card.classList.add('wrong-card');
+      const rightDisplay = q.qType === 'mcq' ? `${q.correctLetter}. ${q.correctText}` : q.correctText;
+      fb.innerHTML = `❌ <strong>Chưa đúng!</strong> (${userAnsDisplay}) · Đáp án đúng là: <strong style="color:var(--success)">${rightDisplay}</strong>.<br>💡 <em>Giải thích:</em> ${q.explainText}`;
+    }
+    fb.classList.add('show');
+  });
+
+  const scorePercent = Math.round((correctCount / activeQuestions.length) * 100);
+  const banner = document.getElementById('scoreBanner');
+  document.getElementById('scoreValue').textContent = `${correctCount} / ${activeQuestions.length} (${scorePercent}%)`;
+  
+  let msg = 'Hãy ôn lại phần lý thuyết và thử sức lại nhé!';
+  if (scorePercent >= 90) msg = 'Xuất sắc! Bạn đã nắm cực kỳ chắc chuyên đề này!';
+  else if (scorePercent >= 70) msg = 'Khá tốt! Hãy xem lại một vài câu sai bên dưới để đạt điểm tuyệt đối.';
+  
+  document.getElementById('scoreDesc').textContent = msg;
+  banner.classList.add('show');
+  banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+</script>
+</body>
+</html>
